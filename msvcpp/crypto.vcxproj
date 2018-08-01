@@ -69,7 +69,6 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">asn1</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">asn1</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
