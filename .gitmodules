@@ -1,0 +1,32 @@
+[submodule "bat-native-anonize"]
+	path = bat-native-anonize
+	url = https://github.com/brave-intl/bat-native-anonize.git
+	branch = win-port
+[submodule "bat-native-ledger"]
+	path = bat-native-ledger
+	url = https://github.com/brave-intl/bat-native-ledger.git
+[submodule "bat-native-rapidjson"]
+	path = bat-native-rapidjson
+	url = https://github.com/brave-intl/bat-native-rapidjson.git
+[submodule "bat-native-tweetnacl"]
+	path = bat-native-tweetnacl
+	url = https://github.com/brave-intl/bat-native-tweetnacl.git
+[submodule "bip39wally-core-native"]
+	path = bip39wally-core-native
+	url = https://github.com/brave-intl/bip39wally-core-native.git
+[submodule "boringssl"]
+	path = boringssl
+	url = https://boringssl.googlesource.com/boringssl
+[submodule "curl"]
+	path = curl
+	url = https://github.com/curl/curl.git
+[submodule "leveldb"]
+	path = leveldb
+	url = https://chromium.googlesource.com/external/leveldb
+	branch = windows
+[submodule "snappy"]
+	path = snappy
+	url = https://github.com/google/snappy.git
+[submodule "googletest"]
+	path = googletest
+	url = https://github.com/google/googletest.git
