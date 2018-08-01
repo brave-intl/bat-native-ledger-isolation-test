@@ -4,9 +4,11 @@
 :: ##########################################################################################
 
 set "ROOT=%cd%"
+set PATCHES=%ROOT%\patches
 set PULLLOCKFILE=.pulllock
+
 if exist %PULLLOCKFILE% (
-  echo You have pulled dependencies already. 
+  echo You have pulled dependencies already. To force it: remove .pulllock file and re-run.
   exit /b 0
 )
 
@@ -32,6 +34,7 @@ git checkout  %bat-native-anonize_commit%
 
 cd %ROOT%\bat-native-ledger
 git checkout  %bat-native-ledger_commit%
+git apply %PATCHES%\bat-native-ledger\bat-native-ledger.patch
 
 cd %ROOT%\bat-native-rapidjson
 git checkout  %bat-native-rapidjson_commit%
@@ -41,17 +44,23 @@ git checkout  %bat-native-tweetnacl_commit%
 
 cd %ROOT%\bip39wally-core-native
 git checkout  %bip39wally-core-native_commit%
+git apply %PATCHES%\bip39wally-core-native\bip39wally-core-native.patch
 
 cd %ROOT%\boringssl
 git checkout  %boringssl_commit%
+copy /Y %PATCHES%\boringssl\err_data.c .
 
 cd %ROOT%\curl
 git checkout  %curl_commit%
+copy /Y %PATCHES%\curl\curl_config.h .
 
 cd %ROOT%\leveldb
 git checkout  %leveldb_commit%
+git apply %PATCHES%\leveldb\leveldb.patch
 
 cd %ROOT%\snappy
 git checkout  %snappy_commit%
+copy /Y %PATCHES%\snappy\config.h .
+copy /Y %PATCHES%\snappy\snappy-stubs-public.h .
 
 cd %ROOT%

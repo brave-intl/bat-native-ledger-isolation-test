@@ -1,0 +1,31 @@
+diff --git a/src/ccan/ccan/crypto/ripemd160/ripemd160.cc b/src/ccan/ccan/crypto/ripemd160/ripemd160.cc
+index 6711995..c3463f9 100644
+--- a/src/ccan/ccan/crypto/ripemd160/ripemd160.cc
++++ b/src/ccan/ccan/crypto/ripemd160/ripemd160.cc
+@@ -12,13 +12,15 @@
+ #include <stdbool.h>
+ #include <assert.h>
+ #include <string.h>
++#include <limits>
+ 
+ static void invalidate_ripemd160(struct ripemd160_ctx *ctx)
+ {
+ #ifdef CCAN_CRYPTO_RIPEMD160_USE_OPENSSL
+ 	ctx->c.num = -1U;
+ #else
+-	ctx->bytes = -1ULL;
++  //ctx->bytes = -1ULL;
++  ctx->bytes = std::numeric_limits<unsigned long long>::max();
+ #endif
+ }
+ 
+@@ -27,7 +29,8 @@ static void check_ripemd160(struct ripemd160_ctx *ctx UNUSED)
+ #ifdef CCAN_CRYPTO_RIPEMD160_USE_OPENSSL
+ 	assert(ctx->c.num != -1U);
+ #else
+-	assert(ctx->bytes != -1ULL);
++	//assert(ctx->bytes != -1ULL);
++  assert(ctx->bytes != std::numeric_limits<unsigned long long>::max());
+ #endif
+ }
+ 

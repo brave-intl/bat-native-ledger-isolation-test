@@ -1,0 +1,103 @@
+diff --git a/src/bat_client.cc b/src/bat_client.cc
+index 17ca14a..33760f3 100644
+--- a/src/bat_client.cc
++++ b/src/bat_client.cc
+@@ -76,10 +76,10 @@ void BatClient::loadStateOrRegisterPersonaCallback(bool success, const std::stri
+ }
+ 
+ void BatClient::registerPersona() {
+-  auto request_id = ledger_->LoadURL(buildURL(REGISTER_PERSONA, PREFIX_V2),
++  std::unique_ptr<ledger::LedgerURLLoader> url_loader = ledger_->LoadURL(buildURL(REGISTER_PERSONA, PREFIX_V2),
+       std::vector<std::string>(), "", "",
+       ledger::URL_METHOD::GET, &handler_);
+-  handler_.AddRequestHandler(std::move(request_id),
++  handler_.AddRequestHandler(std::move(url_loader),
+                              std::bind(&BatClient::requestCredentialsCallback,
+                                        this,
+                                        _1,
+diff --git a/src/bat_helper_platform.cc b/src/bat_helper_platform.cc
+index 7a8b30a..db23985 100644
+--- a/src/bat_helper_platform.cc
++++ b/src/bat_helper_platform.cc
+@@ -13,8 +13,15 @@
+ #include "base/task_scheduler/post_task.h"
+ #include "url/url_canon_stdstring.h"
+ #include "url/url_util.h"
++
++#elif defined _WINDOWS
++#include <shlobj.h>
+ #endif
+ 
++#include <locale>
++#include <codecvt>
++#include <curl/curl.h> //for DecodeURLChars/encodeURIComponent
++
+ #include "static_values.h"
+ 
+ namespace braveledger_bat_helper {
+@@ -25,7 +32,16 @@ namespace braveledger_bat_helper {
+     url::DecodeURLEscapeSequences(input.c_str(), input.length(), &canonOutput);
+     output = base::UTF16ToUTF8(base::StringPiece16(canonOutput.data(), canonOutput.length()));
+ #else
+-    //TODO: to implement
++    CURL *curl = curl_easy_init();
++    if (curl) {
++      int outlen = 0;
++      char *p_output = curl_easy_unescape(curl, input.c_str(), input.size(), &outlen);
++      if (p_output) {
++        output.assign (p_output, outlen);
++        curl_free(p_output);
++      }
++      curl_easy_cleanup(curl);
++    }
+ #endif
+   }
+ 
+@@ -36,8 +52,15 @@ namespace braveledger_bat_helper {
+     url::EncodeURIComponent(instr.c_str(), instr.length(), &surveyorIdCanon);
+     surveyorIdCanon.Complete();
+ #else
+-    //TODO: to implement
+-    assert(false);
++    CURL *curl = curl_easy_init();
++    if (curl) {
++      char *output = curl_easy_escape(curl, instr.c_str(), instr.size());
++      if (output) {
++        outstr = output;
++        curl_free(output);
++      }
++      curl_easy_cleanup(curl);
++    }
+ #endif
+   }
+ 
+@@ -47,6 +70,16 @@ namespace braveledger_bat_helper {
+     base::FilePath dirToSave;
+     base::PathService::Get(base::DIR_HOME, &dirToSave);
+     home = dirToSave.value();
++#elif defined _WINDOWS
++    PWSTR path = NULL;
++    std::string spath;
++    HRESULT hr = SHGetKnownFolderPath(FOLDERID_Profile, 0, NULL, &path);
++    if (SUCCEEDED(hr)) {
++      std::wstring_convert <std::codecvt_utf8<wchar_t>, wchar_t> convert;
++      spath = convert.to_bytes(path);
++    }
++    CoTaskMemFree(path);
++    home = spath;
+ #else
+     //TODO: to implement
+     assert(false);
+@@ -59,9 +92,9 @@ namespace braveledger_bat_helper {
+     base::FilePath root_path (root.c_str());
+     root_path = root_path.Append(leaf);
+     path = root_path.value();
+-#else
+-    //TODO: to implement
+-    assert(false);
++#elif defined _WINDOWS
++    std::string separator("\\");
++    path = root + separator + leaf;
+ #endif
+   }
+ 

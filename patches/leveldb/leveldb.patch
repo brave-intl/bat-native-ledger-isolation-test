@@ -1,0 +1,67 @@
+diff --git a/db/c.cc b/db/c.cc
+index 038e5c0..ab11ddb 100644
+--- a/db/c.cc
++++ b/db/c.cc
+@@ -5,7 +5,7 @@
+ #include "leveldb/c.h"
+ 
+ #include <stdlib.h>
+-#include <unistd.h>
++//#include <unistd.h>
+ #include "leveldb/cache.h"
+ #include "leveldb/comparator.h"
+ #include "leveldb/db.h"
+diff --git a/include/leveldb/status.h b/include/leveldb/status.h
+index 8fe4442..c10e75f 100644
+--- a/include/leveldb/status.h
++++ b/include/leveldb/status.h
+@@ -54,6 +54,9 @@ class Status {
+   // Returns true iff the status indicates a NotFound error.
+   bool IsNotFound() const { return code() == kNotFound; }
+ 
++  // Returns true iff the status indicates a Corruption error.
++  bool IsCorruption() const { return code() == kCorruption; }
++
+   // Return a string representation of this status suitable for printing.
+   // Returns the string "OK" for success.
+   std::string ToString() const;
+diff --git a/port/port.h b/port/port.h
+index 816826b..ce7ae19 100644
+--- a/port/port.h
++++ b/port/port.h
+@@ -16,6 +16,8 @@
+ #  include "port/port_chromium.h"
+ #elif defined(LEVELDB_PLATFORM_ANDROID)
+ #  include "port/port_android.h"
++#elif defined(LEVELDB_PLATFORM_WINDOWS)
++#  include "port/port_win.h"
+ #endif
+ 
+ #endif  // STORAGE_LEVELDB_PORT_PORT_H_
+diff --git a/port/port_win.h b/port/port_win.h
+index 2ffa62c..d160564 100755
+--- a/port/port_win.h
++++ b/port/port_win.h
+@@ -31,7 +31,7 @@
+ #ifndef STORAGE_LEVELDB_PORT_PORT_WIN_H_
+ #define STORAGE_LEVELDB_PORT_PORT_WIN_H_
+ 
+-#define snprintf _snprintf
++//#define snprintf _snprintf_s
+ #define close _close
+ #define fread_unlocked _fread_nolock
+ 
+@@ -39,6 +39,13 @@
+ 
+ #include <stdint.h>
+ 
++#if HAVE_CRC32C
++#include <crc32c/crc32c.h>
++#endif  // HAVE_CRC32C
++#if defined SNAPPY
++#include <snappy.h>
++#endif  // SNAPPY
++
+ namespace leveldb {
+ namespace port {
+ 
