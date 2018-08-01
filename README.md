@@ -24,16 +24,16 @@ Switching to a newer commit is possible but will require some work to put it tog
 
 Switching to a new commit will also require updating this **README.md** and **pull-depends.bat** files.
 
-##Prerequisites:
+## Prerequisites:
 
 * The **leveldb** for windows depends on [Boost C++ library](https://www.boost.org/). The easiest way is to install pre-built Windows binaries and source files from [Boost download page](https://www.boost.org/users/download).
 Configurations for **x86** or **x86_64** will require the matching set of libraries. The location of Boost include directory and libs can be configured in projects properties files **globals.props**, **x86.props** and **x86_64.props** (in 'msvcpp' directory) in variables **$(Boost)** and **$(BoostLib)**.
 
-##Initial setup:
+## Initial setup:
 
 To bring all the dependencies, to switch to the right commit and to apply patches please run `pull-depends.bat` from the repository root directory. 
 
-##Testing:
+## Testing:
 
 The bat-native-ledger library is using threads to run tasks and callbacks. 
 Use **BraveRewardsService::TestingJoinAllRunningTasks()** call after each test to wait for all spawned tasks/callbacks.
