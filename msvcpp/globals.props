@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <Root>$(SolutionDir)</Root>
+    <Anonize2Root>$(Root)bat-native-anonize\</Anonize2Root>
+    <Anonize2>$(Anonize2Root)anon\</Anonize2>
+    <Relic>$(Anonize2Root)relic\</Relic>
+    <Ledger>$(Root)bat-native-ledger\</Ledger>
+    <WallyRoot>$(Root)bip39wally-core-native\</WallyRoot>
+    <RapidJsonRoot>$(Root)bat-native-rapidjson\</RapidJsonRoot>
+    <BoringsslRoot>$(Root)boringssl\</BoringsslRoot>
+    <Tweetnacl>$(Root)\bat-native-tweetnacl\</Tweetnacl>
+    <LeveldbRoot>$(Root)leveldb\</LeveldbRoot>
+    <Snappy>$(Root)snappy\</Snappy>
+    <Boost>C:\lib\boost_1_67_0\</Boost>
+    <Libcurl>$(Root)curl\</Libcurl>
+    <Curlcpp>$(Root)curlcpp\</Curlcpp>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(Boost);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="Root">
+      <Value>$(Root)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Anonize2Root">
+      <Value>$(Anonize2Root)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Anonize2">
+      <Value>$(Anonize2)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Relic">
+      <Value>$(Relic)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Ledger">
+      <Value>$(Ledger)</Value>
+    </BuildMacro>
+    <BuildMacro Include="WallyRoot">
+      <Value>$(WallyRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="RapidJsonRoot">
+      <Value>$(RapidJsonRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BoringsslRoot">
+      <Value>$(BoringsslRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Tweetnacl">
+      <Value>$(Tweetnacl)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LeveldbRoot">
+      <Value>$(LeveldbRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Snappy">
+      <Value>$(Snappy)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Boost">
+      <Value>$(Boost)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Libcurl">
+      <Value>$(Libcurl)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Curlcpp">
+      <Value>$(Curlcpp)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

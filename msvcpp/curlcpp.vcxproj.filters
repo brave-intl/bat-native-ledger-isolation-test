@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(Curlcpp)src\curl_easy.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_header.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_global.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_form.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_multi.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_share.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_info.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_cookie.cpp" />
+    <ClCompile Include="$(Curlcpp)src\curl_exception.cpp" />
+    <ClCompile Include="$(Curlcpp)src\cookie.cpp" />
+    <ClCompile Include="$(Curlcpp)src\cookie_date.cpp" />
+    <ClCompile Include="$(Curlcpp)src\cookie_time.cpp" />
+    <ClCompile Include="$(Curlcpp)src\cookie_datetime.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BCBB60B9-AA3E-3A48-90CB-F26D9DEAE210}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,452 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AE91DF91-50D1-3741-9037-4C73EF6CD8C0}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>crypto</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="globals.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="globals.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="globals.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="globals.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">asn1</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">asn1</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -utf-8 -w44265</AdditionalOptions>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4061;4100;4127;4200;4204;4221;4242;4244;4267;4371;4388;4296;4350;4365;4389;4464;4510;4512;4514;4548;4610;4623;4625;4626;4668;4706;4710;4711;4800;4820;5026;5027;5045</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -utf-8 -w44265</AdditionalOptions>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4061;4100;4127;4200;4204;4221;4242;4244;4267;4371;4388;4296;4350;4365;4389;4464;4510;4512;4514;4548;4610;4623;4625;4626;4668;4706;4710;4711;4800;4820;5026;5027;5045</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -utf-8 -w44265</AdditionalOptions>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4061;4100;4127;4200;4204;4221;4242;4244;4267;4371;4388;4296;4350;4365;4389;4464;4510;4512;4514;4548;4610;4623;4625;4626;4668;4706;4710;4711;4800;4820;5026;5027;5045</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>NDEBUG;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -utf-8 -w44265</AdditionalOptions>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4061;4100;4127;4200;4204;4221;4242;4244;4267;4371;4388;4296;4350;4365;4389;4464;4510;4512;4514;4548;4610;4623;4625;4626;4668;4706;4710;4711;4800;4820;5026;5027;5045</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>NDEBUG;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;BORINGSSL_IMPLEMENTATION;OPENSSL_NO_ASM;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BoringsslRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(BoringsslRoot)crypto\base64\base64.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\bio.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\bio_mem.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\connect.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\fd.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\file.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\hexdump.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\pair.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\printf.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\socket.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bio\socket_helper.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bn_extra\bn_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bn_extra\convert.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\buf\buf.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bytestring\asn1_compat.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bytestring\ber.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bytestring\cbb.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bytestring\cbs.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\bytestring\unicode.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\chacha\chacha.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\cipher_extra.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\derive_key.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_aesccm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_aesctrhmac.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_aesgcmsiv.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_chacha20poly1305.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_null.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_rc2.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_rc4.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_ssl3.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\e_tls.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cipher_extra\tls_cbc.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cmac\cmac.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\conf\conf.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cpu-aarch64-fuchsia.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cpu-aarch64-linux.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cpu-arm-linux.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cpu-arm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cpu-intel.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\cpu-ppc64le.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\crypto.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\curve25519\spake25519.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\dh\check.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\dh\dh.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\dh\dh_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\dh\params.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\digest_extra\digest_extra.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\dsa\dsa.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\dsa\dsa_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\ecdh\ecdh.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\ecdsa_extra\ecdsa_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\ec_extra\ec_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\engine\engine.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\err\err.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\digestsign.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\evp.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\evp_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\evp_ctx.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\pbkdf.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\print.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\p_dsa_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\p_ec.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\p_ec_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\p_ed25519.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\p_ed25519_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\p_rsa.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\p_rsa_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\scrypt.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\evp\sign.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\ex_data.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\fipsmodule\bcm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\fipsmodule\is_fips.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\hkdf\hkdf.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\lhash\lhash.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\mem.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\obj\obj.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\obj\obj_xref.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_all.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_info.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_lib.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_oth.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_pk8.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_pkey.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_x509.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pem\pem_xaux.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pkcs7\pkcs7.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pkcs7\pkcs7_x509.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pkcs8\p5_pbev2.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pkcs8\pkcs8.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pkcs8\pkcs8_x509.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\poly1305\poly1305.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\poly1305\poly1305_arm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\poly1305\poly1305_vec.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\pool\pool.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rand_extra\deterministic.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rand_extra\forkunsafe.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rand_extra\fuchsia.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rand_extra\rand_extra.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rand_extra\windows.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rc4\rc4.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\refcount_c11.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\refcount_lock.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rsa_extra\rsa_asn1.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\rsa_extra\rsa_print.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\stack\stack.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\thread.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\thread_none.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\thread_pthread.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\thread_win.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\pcy_cache.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\pcy_data.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\pcy_lib.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\pcy_map.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\pcy_node.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\pcy_tree.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_akey.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_akeya.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_alt.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_bcons.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_bitst.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_conf.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_cpols.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_crld.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_enum.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_extku.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_genn.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_ia5.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_info.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_int.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_lib.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_ncons.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_ocsp.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_pci.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_pcia.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_pcons.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_pku.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_pmaps.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_prn.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_purp.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_skey.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_sxnet.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509v3\v3_utl.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\algorithm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\asn1_gen.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\a_digest.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\a_sign.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\a_strex.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\a_verify.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\by_dir.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\by_file.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\i2d_pr.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\rsa_pss.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\t_crl.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\t_req.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\t_x509.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\t_x509a.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509cset.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509name.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509rset.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509spki.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_att.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_cmp.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_d2.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_def.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_ext.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_lu.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_obj.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_r2x.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_req.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_set.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_trs.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_txt.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_v3.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_vfy.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x509_vpm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_algor.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_all.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_attrib.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_crl.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_exten.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_info.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_name.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_pkey.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_pubkey.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_req.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_sig.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_spki.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_val.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_x509.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\x509\x_x509a.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\bio\base64_bio.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\blowfish\blowfish.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\cast\cast.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\cast\cast_tables.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\cfb\cfb.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\des\cfb64ede.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\dh\dh_decrepit.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\dsa\dsa_decrepit.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\evp\dss1.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\evp\evp_do_all.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\obj\obj_decrepit.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\rc4\rc4_decrepit.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\ripemd\ripemd.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\rsa\rsa_decrepit.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\ssl\ssl_decrepit.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\x509\x509_decrepit.c" />
+    <ClCompile Include="$(BoringsslRoot)decrepit\xts\xts.c" />
+    <ClCompile Include="$(BoringsslRoot)third_party\fiat\curve25519.c" />
+    <ClCompile Include="$(BoringsslRoot)err_data.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_bitstr.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_bool.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_d2i_fp.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_dup.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_enum.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_gentm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_i2d_fp.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_int.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_mbstr.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_object.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_octet.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_print.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_strnid.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_time.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_type.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_utctm.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\a_utf8.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\asn1_lib.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\asn1_par.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\asn_pack.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\f_enum.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\f_int.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\f_string.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\tasn_dec.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\tasn_enc.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\tasn_fre.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\tasn_new.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\tasn_typ.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\tasn_utl.c" />
+    <ClCompile Include="$(BoringsslRoot)crypto\asn1\time_support.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ssl.vcxproj">
+      <Project>{513e2660-c646-3eb2-982c-5e36ba9d663d}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

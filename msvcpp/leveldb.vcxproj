@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{72A1EDB3-43E4-4FC7-94E8-003AB245ECC5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="globals.props" />
+    <Import Project="x86.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="globals.props" />
+    <Import Project="x86.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="globals.props" />
+    <Import Project="x86_64.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="globals.props" />
+    <Import Project="x86_64.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;LEVELDB_PLATFORM_WINDOWS;OS_WIN;_WINDOWS;LEVELDB_COMPILE_LIBRARY;SNAPPY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(Snappy);$(LeveldbRoot);$(LeveldbRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;LEVELDB_PLATFORM_WINDOWS;OS_WIN;_WINDOWS;LEVELDB_COMPILE_LIBRARY;SNAPPY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(Snappy);$(LeveldbRoot);$(LeveldbRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;LEVELDB_COMPILE_LIBRARY;SNAPPY;LEVELDB_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(Snappy);$(LeveldbRoot);$(LeveldbRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;LEVELDB_COMPILE_LIBRARY;SNAPPY;LEVELDB_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(Snappy);$(LeveldbRoot);$(LeveldbRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(LeveldbRoot)db\builder.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\c.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\dbformat.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\db_impl.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\db_iter.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\filename.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\log_reader.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\log_writer.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\memtable.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\repair.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\table_cache.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\version_edit.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\version_set.cc" />
+    <ClCompile Include="$(LeveldbRoot)db\write_batch.cc" />
+    <ClCompile Include="$(LeveldbRoot)helpers\memenv\memenv.cc" />
+    <ClCompile Include="$(LeveldbRoot)port\port_win.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\block.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\block_builder.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\format.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\iterator.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\merger.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\table.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\table_builder.cc" />
+    <ClCompile Include="$(LeveldbRoot)table\two_level_iterator.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\arena.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\cache.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\coding.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\comparator.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\crc32c.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\env.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\env_boost.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\hash.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\histogram.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\logging.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\options.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\status.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\testharness.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\testutil.cc" />
+    <ClCompile Include="$(LeveldbRoot)util\win_logger.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(LeveldbRoot)db\builder.h" />
+    <ClInclude Include="$(LeveldbRoot)db\dbformat.h" />
+    <ClInclude Include="$(LeveldbRoot)db\db_impl.h" />
+    <ClInclude Include="$(LeveldbRoot)db\db_iter.h" />
+    <ClInclude Include="$(LeveldbRoot)db\filename.h" />
+    <ClInclude Include="$(LeveldbRoot)db\log_format.h" />
+    <ClInclude Include="$(LeveldbRoot)db\log_reader.h" />
+    <ClInclude Include="$(LeveldbRoot)db\log_writer.h" />
+    <ClInclude Include="$(LeveldbRoot)db\memtable.h" />
+    <ClInclude Include="$(LeveldbRoot)db\skiplist.h" />
+    <ClInclude Include="$(LeveldbRoot)db\snapshot.h" />
+    <ClInclude Include="$(LeveldbRoot)db\table_cache.h" />
+    <ClInclude Include="$(LeveldbRoot)db\version_edit.h" />
+    <ClInclude Include="$(LeveldbRoot)db\version_set.h" />
+    <ClInclude Include="$(LeveldbRoot)db\write_batch_internal.h" />
+    <ClInclude Include="$(LeveldbRoot)helpers\memenv\memenv.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\c.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\cache.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\comparator.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\db.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\env.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\iterator.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\options.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\slice.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\status.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\table.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\table_builder.h" />
+    <ClInclude Include="$(LeveldbRoot)include\leveldb\write_batch.h" />
+    <ClInclude Include="$(LeveldbRoot)port\atomic_pointer.h" />
+    <ClInclude Include="$(LeveldbRoot)port\port.h" />
+    <ClInclude Include="$(LeveldbRoot)port\port_example.h" />
+    <ClInclude Include="$(LeveldbRoot)port\port_win.h" />
+    <ClInclude Include="$(LeveldbRoot)port\win\stdint.h" />
+    <ClInclude Include="$(LeveldbRoot)table\block.h" />
+    <ClInclude Include="$(LeveldbRoot)table\block_builder.h" />
+    <ClInclude Include="$(LeveldbRoot)table\format.h" />
+    <ClInclude Include="$(LeveldbRoot)table\iterator_wrapper.h" />
+    <ClInclude Include="$(LeveldbRoot)table\merger.h" />
+    <ClInclude Include="$(LeveldbRoot)table\two_level_iterator.h" />
+    <ClInclude Include="$(LeveldbRoot)util\arena.h" />
+    <ClInclude Include="$(LeveldbRoot)util\coding.h" />
+    <ClInclude Include="$(LeveldbRoot)util\crc32c.h" />
+    <ClInclude Include="$(LeveldbRoot)util\hash.h" />
+    <ClInclude Include="$(LeveldbRoot)util\histogram.h" />
+    <ClInclude Include="$(LeveldbRoot)util\logging.h" />
+    <ClInclude Include="$(LeveldbRoot)util\mutexlock.h" />
+    <ClInclude Include="$(LeveldbRoot)util\random.h" />
+    <ClInclude Include="$(LeveldbRoot)util\testharness.h" />
+    <ClInclude Include="$(LeveldbRoot)util\testutil.h" />
+    <ClInclude Include="$(LeveldbRoot)util\win_logger.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="snappy.vcxproj">
+      <Project>{0690c2d1-ffdf-3134-b5c8-6961985073b3}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
