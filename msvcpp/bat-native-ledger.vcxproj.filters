@@ -92,5 +92,17 @@
     <ClInclude Include="$(Ledger)src\url_request_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="$(Ledger)include\bat\ledger\grant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(Ledger)include\bat\ledger\publisher_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(Ledger)include\bat\ledger\wallet_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(Ledger)include\bat\ledger\promo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
