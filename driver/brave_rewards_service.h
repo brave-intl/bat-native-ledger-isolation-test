@@ -10,8 +10,10 @@
 //#include "base/observer_list.h"
 //#include "components/keyed_service/core/keyed_service.h"
 
+#include "content_site.h"
 #include <string>
 #include <list>
+#include <functional>
 #include "brave_rewards_service_observer.h"
 
 namespace brave_rewards {
@@ -21,8 +23,13 @@ class BraveRewardsServiceObserver;
 class KeyedService {
 public:
   virtual ~KeyedService() {};
+  virtual void Init() {};
   virtual void Shutdown() {};
 };
+
+
+using GetContentSiteListCallback =
+    std::function<void(std::unique_ptr<ContentSiteList>, uint32_t /* next_record */)>;
 
 class BraveRewardsService : public KeyedService {
 public:
@@ -38,10 +45,25 @@ public:
 
   // Ledger interface:///////////////////////////////////////////////////////////////
   virtual void CreateWallet() = 0;
-  virtual void SaveVisit(const std::string& publisher,
+  virtual void OnLoad(const std::string& _tld,
+            const std::string& _domain,
+            const std::string& _path,
+            uint32_t tab_id) = 0;
+  virtual void OnUnload(uint32_t tab_id) = 0;
+  virtual void OnShow(uint32_t tab_id) = 0;
+  virtual void OnHide(uint32_t tab_id) = 0;
+  virtual void OnForeground(uint32_t tab_id) = 0;
+  virtual void OnBackground(uint32_t tab_id) = 0;
+  virtual void OnMediaStart(uint32_t tab_id) = 0;
+  virtual void OnMediaStop(uint32_t tab_id) = 0;
+  virtual void OnXHRLoad(uint32_t tab_id, const std::string& url) = 0;
+  /*virtual void SaveVisit(const std::string& publisher,
                  uint64_t duration,
-                 bool ignoreMinTime) = 0;
+                 bool ignoreMinTime) = 0;*/
 
+  virtual void GetContentSiteList(uint32_t start,
+                                uint32_t limit,
+                                const GetContentSiteListCallback& callback) = 0;
   virtual void SetPublisherMinVisitTime(uint64_t duration_in_milliseconds) = 0;
   virtual void SetPublisherMinVisits(unsigned int visits) = 0;
   virtual void SetPublisherAllowNonVerified(bool allow) = 0;

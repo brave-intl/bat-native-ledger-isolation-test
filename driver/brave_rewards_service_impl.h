@@ -49,6 +49,7 @@ public:
 
 namespace brave_rewards {
 
+class PublisherInfoBackend;
 
 class BraveRewardsServiceImpl : public BraveRewardsService,
                             public ledger::LedgerClient ,public bat_ledger_urlfetcher::URLFetcherDelegate /*,public base::SupportsWeakPtr<BraveRewardsServiceImpl>*/
@@ -62,13 +63,36 @@ public:
 
   // KeyedService///////////////////////////////////////////////////////////////////////////
   void Shutdown() override;
-
-
+  void Init();
   //Ledger interface///////////////////////////////////////////////////////////////////////
   void CreateWallet() override;
-  void SaveVisit(const std::string& publisher,
+  void OnLoad(const std::string& _tld,
+            const std::string& _domain,
+            const std::string& _path,
+            uint32_t tab_id) override;
+  void OnUnload(uint32_t tab_id) override;
+  void OnShow(uint32_t tab_id) override;
+  void OnHide(uint32_t tab_id) override;
+  void OnForeground(uint32_t tab_id) override;
+  void OnBackground(uint32_t tab_id) override;
+  void OnMediaStart(uint32_t tab_id) override;
+  void OnMediaStop(uint32_t tab_id) override;
+  void OnXHRLoad(uint32_t tab_id, const std::string& url) override;
+  /*void SaveVisit(const std::string& publisher,
                  uint64_t duration,
-                 bool ignoreMinTime) override;
+                 bool ignoreMinTime) override;*/
+  void SavePublisherInfo(std::unique_ptr<ledger::PublisherInfo> publisher_info,
+                 ledger::PublisherInfoCallback callback) override;
+  void LoadPublisherInfo(const ledger::PublisherInfo::id_type& publisher_id,
+                 ledger::PublisherInfoCallback callback) override;
+  void LoadPublisherInfoList(
+      uint32_t start,
+      uint32_t limit,
+      ledger::PublisherInfoFilter filter,
+      ledger::GetPublisherInfoListCallback callback) override;
+  void GetContentSiteList(uint32_t start,
+                          uint32_t limit,
+     const GetContentSiteListCallback& callback) override;
 
   void SetPublisherMinVisitTime(uint64_t duration_in_milliseconds) override;
   void SetPublisherMinVisits(unsigned int visits) override;
@@ -93,14 +117,24 @@ private:
 
   void OnPublisherStateLoaded(ledger::LedgerCallbackHandler* handler,const std::string& data);
 
+  //using std::shared_ptr instead of original unique_ptr: couldn't bind noncopyable unique_ptr to std::function
+  void OnPublisherInfoSaved(ledger::PublisherInfoCallback callback,
+                            std::shared_ptr<ledger::PublisherInfo> info,
+                            bool success);
+  void OnPublisherInfoLoaded(ledger::PublisherInfoCallback callback,
+                             std::shared_ptr<ledger::PublisherInfo> info);
+  void OnPublisherInfoListLoaded(uint32_t start,
+                                 uint32_t limit,
+                                 ledger::GetPublisherInfoListCallback callback,
+                                 const ledger::PublisherInfoList& list);
 
 
   void PostWriteCallback(std::function < void(bool success)> & callback, bool write_success);
-  void TriggerOnWalletCreated(int error_code);
+  void TriggerOnWalletInitialized(int error_code);
 
   // ledger::LedgerClient/////////////////////////////////////////////////////////////////////////
   std::string GenerateGUID() const override;
-  void OnWalletCreated(ledger::Result result) override;
+  void OnWalletInitialized(ledger::Result result) override;
   void OnReconcileComplete(ledger::Result result,
                            const std::string& viewing_id) override;
   void LoadLedgerState(ledger::LedgerCallbackHandler* handler) override;
@@ -123,15 +157,29 @@ private:
   // URLFetcherDelegate impl
   void OnURLFetchComplete(const bat_ledger_urlfetcher::URLFetcher* source) /*override*/;
 
-  std::unique_ptr<ledger::Ledger> ledger_;
+  void OnWalletProperties(ledger::Result result,
+                          std::unique_ptr<ledger::WalletInfo> info) override;
+  void GetWalletProperties() override;
+  void GetPromotion(const std::string& lang, const std::string& paymentId) override;
+  void GetPromotionCaptcha() override;
+  //void SolvePromotionCaptcha(const std::string& solution) const override;
+  //std::string GetWalletPassphrase() const override;
+  //void RecoverWallet(const std::string passPhrase) const override;
+  void OnPromotion(ledger::Promo result) override;
+  void OnPromotionCaptcha(const std::string& image) override;
+  void OnRecoverWallet(ledger::Result result, double balance) override;
+  void OnPromotionFinish(ledger::Result result, unsigned int statusCode, uint64_t expirationDate) override;
 
   Profile* profile_;  // NOT OWNED
+  std::unique_ptr<ledger::Ledger> ledger_;
   //const scoped_refptr<base::SequencedTaskRunner> file_task_runner_;
   std::mutex vec_mx_;
   std::vector <std::thread> tasks_in_progress_;
 
   const std::string ledger_state_path_;
   const std::string publisher_state_path_;
+  const std::string publisher_info_db_path_;
+  std::unique_ptr<PublisherInfoBackend> publisher_info_backend_;
 
   std::map<const bat_ledger_urlfetcher::URLFetcher*, FetchCallback> fetchers_;
 
