@@ -16,7 +16,7 @@ type nul > %PULLLOCKFILE%
 
 :: Commits the solution is bound to
 set bat-native-anonize_commit=5e3e8eb137a1837a136a0d364ece01d0cdae6098
-set bat-native-ledger_commit=c373c55313edc97b1529b21bd8634e78c51b4777
+set bat-native-ledger_commit=d95be8fd5cfe7307d4dc15ea2d28f80e2a3e66a3
 set bat-native-rapidjson_commit=744b43313525a047eda4f2e2e689aa88b6c596fa
 set bat-native-tweetnacl_commit=05ed8f82faa03609fe5ae0a4c2d454afbe2ff267
 set bip39wally-core-native_commit=e5aba371a56d3e41f7e80e868312446ce7bd434c 
