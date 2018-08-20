@@ -1,20 +1,16 @@
-diff --git a/src/bat_client.cc b/src/bat_client.cc
-index 17ca14a..33760f3 100644
---- a/src/bat_client.cc
-+++ b/src/bat_client.cc
-@@ -76,10 +76,10 @@ void BatClient::loadStateOrRegisterPersonaCallback(bool success, const std::stri
- }
+diff --git a/include/bat/ledger/publisher_info.h b/include/bat/ledger/publisher_info.h
+index 37b1d9f..06340e9 100644
+--- a/include/bat/ledger/publisher_info.h
++++ b/include/bat/ledger/publisher_info.h
+@@ -39,7 +39,7 @@ LEDGER_EXPORT struct PublisherInfo {
+   bool excluded;
+ };
  
- void BatClient::registerPersona() {
--  auto request_id = ledger_->LoadURL(buildURL(REGISTER_PERSONA, PREFIX_V2),
-+  std::unique_ptr<ledger::LedgerURLLoader> url_loader = ledger_->LoadURL(buildURL(REGISTER_PERSONA, PREFIX_V2),
-       std::vector<std::string>(), "", "",
-       ledger::URL_METHOD::GET, &handler_);
--  handler_.AddRequestHandler(std::move(request_id),
-+  handler_.AddRequestHandler(std::move(url_loader),
-                              std::bind(&BatClient::requestCredentialsCallback,
-                                        this,
-                                        _1,
+-using PublisherInfoList = std::vector<const PublisherInfo>;
++using PublisherInfoList = std::vector<PublisherInfo>;
+ 
+ }  // namespace ledger
+ 
 diff --git a/src/bat_helper_platform.cc b/src/bat_helper_platform.cc
 index 7a8b30a..db23985 100644
 --- a/src/bat_helper_platform.cc

@@ -46,7 +46,6 @@
     <ClInclude Include="$(Ledger)src\rapidjson_bat_helper.h" />
     <ClInclude Include="$(Ledger)src\static_values.h" />
     <ClInclude Include="$(Ledger)src\url_request_handler.h" />
-    <ClInclude Include="$(Ledger)include\bat\ledger\grant.h" />
     <ClInclude Include="$(Ledger)include\bat\ledger\promo.h" />
     <ClInclude Include="$(Ledger)include\bat\ledger\publisher_info.h" />
     <ClInclude Include="$(Ledger)include\bat\ledger\wallet_info.h" />
