@@ -23,7 +23,6 @@
     <ClCompile Include="$(Ledger)src\bat_client.cc" />
     <ClCompile Include="$(Ledger)src\bat_get_media.cc" />
     <ClCompile Include="$(Ledger)src\bat_helper.cc" />
-    <ClCompile Include="$(Ledger)src\bat_helper_platform.cc" />
     <ClCompile Include="$(Ledger)src\bat_publishers.cc" />
     <ClCompile Include="$(Ledger)src\ledger_impl.cc" />
     <ClCompile Include="$(Ledger)src\ledger_task_runner_impl.cc" />
@@ -46,9 +45,10 @@
     <ClInclude Include="$(Ledger)src\rapidjson_bat_helper.h" />
     <ClInclude Include="$(Ledger)src\static_values.h" />
     <ClInclude Include="$(Ledger)src\url_request_handler.h" />
-    <ClInclude Include="$(Ledger)include\bat\ledger\promo.h" />
     <ClInclude Include="$(Ledger)include\bat\ledger\publisher_info.h" />
     <ClInclude Include="$(Ledger)include\bat\ledger\wallet_info.h" />
+    <ClInclude Include="$(Ledger)include\bat\ledger\balance_report_info.h" />
+    <ClInclude Include="$(Ledger)include\bat\ledger\grant.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="anonize2.vcxproj">

@@ -27,9 +27,6 @@
     <ClCompile Include="$(Ledger)src\bat_helper.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="$(Ledger)src\bat_helper_platform.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="$(Ledger)src\bat_publishers.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,7 +95,10 @@
     <ClInclude Include="$(Ledger)include\bat\ledger\wallet_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="$(Ledger)include\bat\ledger\promo.h">
+    <ClInclude Include="..\bat-native-ledger\include\bat\ledger\balance_report_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bat-native-ledger\include\bat\ledger\grant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
