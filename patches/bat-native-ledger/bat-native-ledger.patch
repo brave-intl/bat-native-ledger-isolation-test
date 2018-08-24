@@ -1,99 +1,22 @@
 diff --git a/include/bat/ledger/publisher_info.h b/include/bat/ledger/publisher_info.h
-index 37b1d9f..06340e9 100644
+index f4f210c..7c9ddd0 100644
 --- a/include/bat/ledger/publisher_info.h
 +++ b/include/bat/ledger/publisher_info.h
-@@ -39,7 +39,7 @@ LEDGER_EXPORT struct PublisherInfo {
-   bool excluded;
+@@ -36,7 +36,7 @@ LEDGER_EXPORT enum PUBLISHER_MONTH {
+ };
+ 
+ LEDGER_EXPORT struct PublisherInfoFilter {
+-  PublisherInfoFilter(int category_, 
++  PublisherInfoFilter(int category_,
+     PUBLISHER_MONTH month_, const std::string& year_);
+ 
+   int category;
+@@ -81,7 +81,7 @@ LEDGER_EXPORT struct PublisherInfo {
+   std::string year;
  };
  
 -using PublisherInfoList = std::vector<const PublisherInfo>;
 +using PublisherInfoList = std::vector<PublisherInfo>;
  
  }  // namespace ledger
- 
-diff --git a/src/bat_helper_platform.cc b/src/bat_helper_platform.cc
-index 7a8b30a..db23985 100644
---- a/src/bat_helper_platform.cc
-+++ b/src/bat_helper_platform.cc
-@@ -13,8 +13,15 @@
- #include "base/task_scheduler/post_task.h"
- #include "url/url_canon_stdstring.h"
- #include "url/url_util.h"
-+
-+#elif defined _WINDOWS
-+#include <shlobj.h>
- #endif
- 
-+#include <locale>
-+#include <codecvt>
-+#include <curl/curl.h> //for DecodeURLChars/encodeURIComponent
-+
- #include "static_values.h"
- 
- namespace braveledger_bat_helper {
-@@ -25,7 +32,16 @@ namespace braveledger_bat_helper {
-     url::DecodeURLEscapeSequences(input.c_str(), input.length(), &canonOutput);
-     output = base::UTF16ToUTF8(base::StringPiece16(canonOutput.data(), canonOutput.length()));
- #else
--    //TODO: to implement
-+    CURL *curl = curl_easy_init();
-+    if (curl) {
-+      int outlen = 0;
-+      char *p_output = curl_easy_unescape(curl, input.c_str(), input.size(), &outlen);
-+      if (p_output) {
-+        output.assign (p_output, outlen);
-+        curl_free(p_output);
-+      }
-+      curl_easy_cleanup(curl);
-+    }
- #endif
-   }
- 
-@@ -36,8 +52,15 @@ namespace braveledger_bat_helper {
-     url::EncodeURIComponent(instr.c_str(), instr.length(), &surveyorIdCanon);
-     surveyorIdCanon.Complete();
- #else
--    //TODO: to implement
--    assert(false);
-+    CURL *curl = curl_easy_init();
-+    if (curl) {
-+      char *output = curl_easy_escape(curl, instr.c_str(), instr.size());
-+      if (output) {
-+        outstr = output;
-+        curl_free(output);
-+      }
-+      curl_easy_cleanup(curl);
-+    }
- #endif
-   }
- 
-@@ -47,6 +70,16 @@ namespace braveledger_bat_helper {
-     base::FilePath dirToSave;
-     base::PathService::Get(base::DIR_HOME, &dirToSave);
-     home = dirToSave.value();
-+#elif defined _WINDOWS
-+    PWSTR path = NULL;
-+    std::string spath;
-+    HRESULT hr = SHGetKnownFolderPath(FOLDERID_Profile, 0, NULL, &path);
-+    if (SUCCEEDED(hr)) {
-+      std::wstring_convert <std::codecvt_utf8<wchar_t>, wchar_t> convert;
-+      spath = convert.to_bytes(path);
-+    }
-+    CoTaskMemFree(path);
-+    home = spath;
- #else
-     //TODO: to implement
-     assert(false);
-@@ -59,9 +92,9 @@ namespace braveledger_bat_helper {
-     base::FilePath root_path (root.c_str());
-     root_path = root_path.Append(leaf);
-     path = root_path.value();
--#else
--    //TODO: to implement
--    assert(false);
-+#elif defined _WINDOWS
-+    std::string separator("\\");
-+    path = root + separator + leaf;
- #endif
-   }
  
