@@ -38,6 +38,8 @@
 //#define COM_NO_WINDOWS_H
 #include <combaseapi.h>
 
+#include <curl/curl.h> //for curl_easy_escape
+
 // TODO, just for test purpose
 static bool created_wallet = false;
 //
@@ -47,6 +49,15 @@ using namespace std::placeholders;
 namespace brave_rewards {
 
 namespace {
+
+void GetLocalMonthYear(ledger::PUBLISHER_MONTH& month, std::string& year) {
+  auto now = std::chrono::system_clock::now();
+  time_t tt = std::chrono::system_clock::to_time_t(now);
+  tm tm1;
+  localtime_s(&tm1, &tt);
+  year = std::to_string(tm1.tm_year + 1900);
+  month = (ledger::PUBLISHER_MONTH)(tm1.tm_mon + 1);
+}
 
 class LedgerURLLoaderImpl : public ledger::LedgerURLLoader {
  public:
@@ -93,7 +104,7 @@ std::string LoadStateOnFileTaskRunner(const std::string& path) {
 bool SavePublisherInfoOnFileTaskRunner(
     ledger::PublisherInfo publisher_info,
     PublisherInfoBackend* backend) {
-  if (backend && backend->Put(publisher_info.id, publisher_info.ToJSON())) {
+  if (backend && backend->Put(publisher_info.key, publisher_info.ToJSON())) {
     return true;
   }
 
@@ -101,11 +112,11 @@ bool SavePublisherInfoOnFileTaskRunner(
 }
 
 std::unique_ptr<ledger::PublisherInfo> LoadPublisherInfoOnFileTaskRunner(
-    const std::string& id,
+    const std::string& key,
     PublisherInfoBackend* backend) {
   std::unique_ptr<ledger::PublisherInfo> info;
    std::string json;
-  if (backend && backend->Get(id, &json)) {
+  if (backend && backend->Get(key, &json)) {
     info.reset(
         new ledger::PublisherInfo(ledger::PublisherInfo::FromJSON(json)));
   }
@@ -117,10 +128,11 @@ ledger::PublisherInfoList LoadPublisherInfoListOnFileTaskRunner(
     uint32_t start,
     uint32_t limit,
     ledger::PublisherInfoFilter filter,
+    const std::vector<std::string>& prefix,
     PublisherInfoBackend* backend) {
   ledger::PublisherInfoList list;
    std::vector<std::string> results;
-  if (backend && backend->Load(start, limit, results)) {
+  if (backend && backend->LoadWithPrefix(start, limit, prefix, results)) {
     for (std::vector<std::string>::const_iterator it =
         results.begin(); it != results.end(); ++it) {
       list.push_back(ledger::PublisherInfo::FromJSON(*it));
@@ -129,19 +141,6 @@ ledger::PublisherInfoList LoadPublisherInfoListOnFileTaskRunner(
    return list;
 }
 
-void GetContentSiteListInternal(
-    uint32_t start,
-    uint32_t limit,
-    const GetContentSiteListCallback& callback,
-    const ledger::PublisherInfoList& publisher_list,
-    uint32_t next_record) {
-  std::unique_ptr<ContentSiteList> site_list(new ContentSiteList);
-  for (ledger::PublisherInfoList::const_iterator it =
-      publisher_list.begin(); it != publisher_list.end(); ++it) {
-    site_list->push_back(PublisherInfoToContentSite(*it));
-  }
-  callback(std::move(site_list), next_record);
-}
 static uint64_t next_id = 1;
 }  // namespace
 
@@ -194,51 +193,59 @@ void BraveRewardsServiceImpl::CreateWallet() {
   created_wallet = true;
 }
 
-/*
-void BraveRewardsServiceImpl::SaveVisit(const std::string& publisher,
-                 uint64_t duration,
-                 bool ignoreMinTime) {
-  ledger_->SaveVisit(publisher, duration, ignoreMinTime);
-}*/
+
+
+void BraveRewardsServiceImpl::MakePayment(const ledger::PaymentData& payment_data) {
+  ledger_->MakePayment(payment_data);
+}
+
+void BraveRewardsServiceImpl::AddRecurringPayment(const std::string& publisher_id, const double& value) {
+  ledger_->AddRecurringPayment(publisher_id, value);
+}
+
+void BraveRewardsServiceImpl::SetBalanceReport(const ledger::BalanceReportInfo& report_info) {
+  ledger::PUBLISHER_MONTH month = ledger::PUBLISHER_MONTH::JANUARY;
+  std::string year;
+  GetLocalMonthYear(month, year);
+  ledger_->SetBalanceReport(year, month, report_info);
+}
+
+bool BraveRewardsServiceImpl::GetBalanceReport(ledger::BalanceReportInfo* report_info) const {
+  ledger::PUBLISHER_MONTH month = ledger::PUBLISHER_MONTH::JANUARY;
+  std::string year;
+  GetLocalMonthYear(month, year);
+  return ledger_->GetBalanceReport(year, month, report_info);
+}
 
 void BraveRewardsServiceImpl::OnLoad(const std::string& _tld,
             const std::string& _domain,
             const std::string& _path,
             uint32_t tab_id) {
-  ledger::VisitData visit_data(_tld, _domain, _path, tab_id);
-  auto start = std::chrono::system_clock::now().time_since_epoch();
-  uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds> (start).count();
-  ledger_->OnLoad(visit_data, ms);
+  ledger::PUBLISHER_MONTH month = ledger::PUBLISHER_MONTH::JANUARY;
+  std::string year;
+  GetLocalMonthYear(month, year);
+  ledger::VisitData visit_data(_tld, _domain, _path, tab_id, month, year);
+  ledger_->OnLoad(visit_data, GetCurrentTimeStamp());
 }
 
 void BraveRewardsServiceImpl::OnUnload(uint32_t tab_id) {
-  auto start = std::chrono::system_clock::now().time_since_epoch();
-  uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds> (start).count();
-  ledger_->OnUnload(tab_id, ms);
+  ledger_->OnUnload(tab_id, GetCurrentTimeStamp());
 }
 
 void BraveRewardsServiceImpl::OnShow(uint32_t tab_id) {
-  auto start = std::chrono::system_clock::now().time_since_epoch();
-  uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds> (start).count();
-  ledger_->OnShow(tab_id, ms);
+  ledger_->OnShow(tab_id, GetCurrentTimeStamp());
 }
 
 void BraveRewardsServiceImpl::OnHide(uint32_t tab_id) {
-  auto start = std::chrono::system_clock::now().time_since_epoch();
-  uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds> (start).count();
-  ledger_->OnHide(tab_id, ms);
+  ledger_->OnHide(tab_id, GetCurrentTimeStamp());
 }
 
 void BraveRewardsServiceImpl::OnForeground(uint32_t tab_id) {
-  auto start = std::chrono::system_clock::now().time_since_epoch();
-  uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds> (start).count();
-  ledger_->OnForeground(tab_id, ms);
+  ledger_->OnForeground(tab_id, GetCurrentTimeStamp());
 }
 
 void BraveRewardsServiceImpl::OnBackground(uint32_t tab_id) {
-  auto start = std::chrono::system_clock::now().time_since_epoch();
-  uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds> (start).count();
-  ledger_->OnBackground(tab_id, ms);
+  ledger_->OnBackground(tab_id, GetCurrentTimeStamp());
 }
 
 void BraveRewardsServiceImpl::OnMediaStart(uint32_t tab_id) {
@@ -249,19 +256,51 @@ void BraveRewardsServiceImpl::OnMediaStop(uint32_t tab_id) {
 
 }
 
-void BraveRewardsServiceImpl::OnXHRLoad(uint32_t tab_id, const std::string& url) {
-  ledger_->OnXHRLoad(tab_id, url);
+uint64_t BraveRewardsServiceImpl::GetCurrentTimeStamp() {
+  auto start = std::chrono::system_clock::now().time_since_epoch();
+  return std::chrono::duration_cast<std::chrono::milliseconds> (start).count();
 }
 
-void BraveRewardsServiceImpl::GetContentSiteList(
+void BraveRewardsServiceImpl::OnXHRLoad(uint32_t tab_id, const std::string & url,
+  const std::string& first_party_url, const std::string& referrer) {
+
+  std::map<std::string, std::string> parts;
+
+  // Temporary commented out
+  //for (net::QueryIterator it(url); !it.IsAtEnd(); it.Advance()) {
+  //  parts[it.GetKey()] = it.GetUnescapedValue();
+  //}
+  //ledger_->OnXHRLoad(tab_id, url, parts, /*first_party_url, referrer,*/ GetCurrentTimeStamp());
+}
+
+std::string BraveRewardsServiceImpl::URIEncode(const std::string& value) {
+  std::string result;
+  CURL *curl = curl_easy_init();
+  if (curl) {
+    char *output = curl_easy_escape(curl, value.c_str(), value.size());
+    if (output) {
+      result = output;
+      curl_free(output);
+    }
+    curl_easy_cleanup(curl);
+  }
+
+  return result;
+
+  //return net::EscapeQueryParamValue(value, false);
+}
+
+std::vector<ledger::ContributionInfo> BraveRewardsServiceImpl::GetRecurringDonationPublisherInfo() {
+  return ledger_->GetRecurringDonationPublisherInfo();
+}
+
+void BraveRewardsServiceImpl::GetPublisherInfoList(
     uint32_t start, uint32_t limit,
-    const GetContentSiteListCallback& callback) {
+    const ledger::PublisherInfoFilter& filter,
+    ledger::GetPublisherInfoListCallback callback) {
   ledger_->GetPublisherInfoList(start, limit,
-      ledger::PublisherInfoFilter::DEFAULT,
-      std::bind(&GetContentSiteListInternal,
-                start,
-                limit,
-                std::cref(callback), _1, _2));
+      filter,
+      callback);
 }
 
 void BraveRewardsServiceImpl::SavePublisherInfo(
@@ -285,10 +324,10 @@ void BraveRewardsServiceImpl::OnPublisherInfoSaved(
 }
 
 void BraveRewardsServiceImpl::LoadPublisherInfo(
-    const ledger::PublisherInfo::id_type& publisher_id,
+    const std::string& publisher_key,
     ledger::PublisherInfoCallback callback) {
 
-  std::unique_ptr<ledger::PublisherInfo> pub_info = LoadPublisherInfoOnFileTaskRunner(publisher_id, publisher_info_backend_.get());
+  std::unique_ptr<ledger::PublisherInfo> pub_info = LoadPublisherInfoOnFileTaskRunner(publisher_key, publisher_info_backend_.get());
   bat_ledger::LedgerTaskRunnerImpl::Task t = std::bind(&BraveRewardsServiceImpl::OnPublisherInfoLoaded, this, callback, std::shared_ptr<ledger::PublisherInfo>(pub_info.release()));
   std::unique_ptr<ledger::LedgerTaskRunner> task(new bat_ledger::LedgerTaskRunnerImpl(t));
   RunTask(std::move(task));
@@ -306,9 +345,10 @@ void BraveRewardsServiceImpl::LoadPublisherInfoList(
     uint32_t start,
     uint32_t limit,
     ledger::PublisherInfoFilter filter,
+    const std::vector<std::string>& prefix,
     ledger::GetPublisherInfoListCallback callback) {
 
-  ledger::PublisherInfoList pubList = LoadPublisherInfoListOnFileTaskRunner(start, limit, filter, publisher_info_backend_.get());
+  ledger::PublisherInfoList pubList = LoadPublisherInfoListOnFileTaskRunner(start, limit, filter, prefix, publisher_info_backend_.get());
   bat_ledger::LedgerTaskRunnerImpl::Task t = std::bind(&BraveRewardsServiceImpl::OnPublisherInfoListLoaded, this, start, limit, callback, std::cref(pubList));
   std::unique_ptr<ledger::LedgerTaskRunner> task(new bat_ledger::LedgerTaskRunnerImpl(t));
   RunTask(std::move(task));
@@ -585,27 +625,24 @@ void BraveRewardsServiceImpl::GetWalletProperties() {
   ledger_->GetWalletProperties();
 }
 
-void BraveRewardsServiceImpl::OnPromotion(ledger::Promo result) {
+void BraveRewardsServiceImpl::GetGrant(const std::string& lang, const std::string& paymentId) {
   // TODO
 }
 
-void BraveRewardsServiceImpl::OnPromotionCaptcha(const std::string& image) {
+void BraveRewardsServiceImpl::OnGrant(ledger::Result result, const ledger::Grant& grant) {
   // TODO
 }
-
-void BraveRewardsServiceImpl::OnRecoverWallet(ledger::Result result, double balance) {
+void BraveRewardsServiceImpl::GetGrantCaptcha() {
   // TODO
 }
-
-void BraveRewardsServiceImpl::OnPromotionFinish(ledger::Result result, unsigned int statusCode, uint64_t expirationDate) {
+void BraveRewardsServiceImpl::OnGrantCaptcha(const std::string& image) {
   // TODO
 }
-
-void BraveRewardsServiceImpl::GetPromotion(const std::string& lang, const std::string& paymentId) {
+void BraveRewardsServiceImpl::OnRecoverWallet(ledger::Result result, double balance,
+  const std::vector<ledger::Grant>& grants) {
   // TODO
 }
-
-void BraveRewardsServiceImpl::GetPromotionCaptcha() {
+void BraveRewardsServiceImpl::OnGrantFinish(ledger::Result result, const ledger::Grant& grant) {
   // TODO
 }
 

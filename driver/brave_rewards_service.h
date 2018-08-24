@@ -15,6 +15,7 @@
 #include <list>
 #include <functional>
 #include "brave_rewards_service_observer.h"
+#include "bat/ledger/ledger.h"
 
 namespace brave_rewards {
 
@@ -27,9 +28,6 @@ public:
   virtual void Shutdown() {};
 };
 
-
-using GetContentSiteListCallback =
-    std::function<void(std::unique_ptr<ContentSiteList>, uint32_t /* next_record */)>;
 
 class BraveRewardsService : public KeyedService {
 public:
@@ -45,6 +43,9 @@ public:
 
   // Ledger interface:///////////////////////////////////////////////////////////////
   virtual void CreateWallet() = 0;
+
+  virtual void MakePayment(const ledger::PaymentData& payment_data) = 0;
+  virtual void AddRecurringPayment(const std::string& publisher_id, const double& value) = 0;
   virtual void OnLoad(const std::string& _tld,
             const std::string& _domain,
             const std::string& _path,
@@ -56,24 +57,29 @@ public:
   virtual void OnBackground(uint32_t tab_id) = 0;
   virtual void OnMediaStart(uint32_t tab_id) = 0;
   virtual void OnMediaStop(uint32_t tab_id) = 0;
-  virtual void OnXHRLoad(uint32_t tab_id, const std::string& url) = 0;
+  virtual void OnXHRLoad(uint32_t tab_id,
+      const std::string & url, const std::string& first_party_url,
+      const std::string& referrer) = 0;
   /*virtual void SaveVisit(const std::string& publisher,
                  uint64_t duration,
                  bool ignoreMinTime) = 0;*/
 
-  virtual void GetContentSiteList(uint32_t start,
+  virtual std::vector<ledger::ContributionInfo> GetRecurringDonationPublisherInfo() = 0;
+  virtual void GetPublisherInfoList(uint32_t start,
                                 uint32_t limit,
-                                const GetContentSiteListCallback& callback) = 0;
+                                const ledger::PublisherInfoFilter& filter,
+                                ledger::GetPublisherInfoListCallback callback) = 0;
   virtual void SetPublisherMinVisitTime(uint64_t duration_in_milliseconds) = 0;
   virtual void SetPublisherMinVisits(unsigned int visits) = 0;
   virtual void SetPublisherAllowNonVerified(bool allow) = 0;
   virtual void SetContributionAmount(double amount) = 0;
+  virtual void SetBalanceReport(const ledger::BalanceReportInfo& report_info) = 0;
 
   virtual uint64_t GetPublisherMinVisitTime() const = 0; // In milliseconds
   virtual unsigned int GetPublisherMinVisits() const = 0;
   virtual bool GetPublisherAllowNonVerified() const = 0;
   virtual double GetContributionAmount() const = 0;
-
+  virtual bool GetBalanceReport(ledger::BalanceReportInfo* report_info) const = 0;
   //Testing
   virtual void TestingJoinAllRunningTasks() = 0;
 
