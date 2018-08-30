@@ -39,6 +39,9 @@
     <ClCompile Include="$(Ledger)src\url_request_handler.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\bat-native-ledger\src\bat_helper_platform.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(Ledger)include\bat\ledger\export.h">
@@ -95,10 +98,10 @@
     <ClInclude Include="$(Ledger)include\bat\ledger\wallet_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\bat-native-ledger\include\bat\ledger\balance_report_info.h">
+    <ClInclude Include="$(Ledger)include\bat\ledger\balance_report_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\bat-native-ledger\include\bat\ledger\grant.h">
+    <ClInclude Include="$(Ledger)include\bat\ledger\grant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

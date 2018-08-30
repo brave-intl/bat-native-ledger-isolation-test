@@ -27,6 +27,7 @@
     <ClCompile Include="$(Ledger)src\ledger_impl.cc" />
     <ClCompile Include="$(Ledger)src\ledger_task_runner_impl.cc" />
     <ClCompile Include="$(Ledger)src\url_request_handler.cc" />
+    <ClCompile Include="..\bat-native-ledger\src\bat_helper_platform.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(Ledger)include\bat\ledger\export.h" />

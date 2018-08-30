@@ -34,7 +34,6 @@ git checkout  %bat-native-anonize_commit%
 
 cd %ROOT%\bat-native-ledger
 git checkout  %bat-native-ledger_commit%
-git apply %PATCHES%\bat-native-ledger\bat-native-ledger.patch
 
 cd %ROOT%\bat-native-rapidjson
 git checkout  %bat-native-rapidjson_commit%
