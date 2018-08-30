@@ -24,6 +24,8 @@
 //#include "content/public/browser/browser_thread.h"
 //#include "net/url_request/url_fetcher_delegate.h"
 
+#include <boost/asio.hpp>
+
 
 namespace ledger {
 class Ledger;
@@ -87,6 +89,8 @@ public:
                  uint64_t duration,
                  bool ignoreMinTime) override;*/
 
+  void SetTimer(uint64_t time_offset, uint32_t & timer_id) override;
+
   void SetPublisherMinVisitTime(uint64_t duration_in_milliseconds) override;
   void SetPublisherMinVisits(unsigned int visits) override;
   void SetPublisherAllowNonVerified(bool allow) override;
@@ -116,6 +120,8 @@ public:
                           const ledger::PublisherInfoFilter& filter,
                           ledger::GetPublisherInfoListCallback callback) override;
   std::vector<ledger::ContributionInfo> GetRecurringDonationPublisherInfo() override;
+
+  void SavePublishersList(const std::string& publisher_state,ledger::LedgerCallbackHandler* handler) override;
 
   void TestingJoinAllRunningTasks();
 
@@ -198,6 +204,15 @@ private:
   std::unique_ptr<PublisherInfoBackend> publisher_info_backend_;
 
   std::map<const bat_ledger_urlfetcher::URLFetcher*, FetchCallback> fetchers_;
+
+
+  //timers implementation
+  void Cancel_All_Timers();
+  std::vector <boost::asio::deadline_timer> timers_;
+  std::vector <std::thread> timer_threads_;
+  boost::asio::io_service io_;
+  uint32_t timer_id_ = 0u;
+  std::mutex timer_mx_;
 
 };
 

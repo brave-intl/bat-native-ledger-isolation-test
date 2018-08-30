@@ -40,6 +40,9 @@
 
 #include <curl/curl.h> //for curl_easy_escape
 
+#include <boost/date_time/posix_time/posix_time.hpp>
+
+
 // TODO, just for test purpose
 static bool created_wallet = false;
 //
@@ -175,10 +178,12 @@ BraveRewardsServiceImpl::BraveRewardsServiceImpl(Profile* profile) :
     ledger_state_path_(profile_->GetPath().append("\\ledger_state")),
     publisher_state_path_(profile_->GetPath().append("\\publisher_state")),
     publisher_info_db_path_(profile->GetPath().append("\\publisher_info")),
-    publisher_info_backend_(new PublisherInfoBackend(publisher_info_db_path_)) {
+    publisher_info_backend_(new PublisherInfoBackend(publisher_info_db_path_)),
+    timer_id_ (0u){
 }
 
 BraveRewardsServiceImpl::~BraveRewardsServiceImpl() {
+  Cancel_All_Timers();
 }
 
 void BraveRewardsServiceImpl::Init() {
@@ -711,6 +716,50 @@ void BraveRewardsServiceImpl::TestingJoinAllRunningTasks() {
 void BraveRewardsServiceImpl::TriggerOnWalletInitialized(int error_code) {
   for (auto& observer : observers_)
     observer->OnWalletInitialized(this, error_code);
+}
+
+void BraveRewardsServiceImpl::SetTimer(uint64_t time_offset, uint32_t & timer_id) {
+  std::lock_guard<std::mutex> lk(timer_mx_);
+  timer_id_++;
+  timers_.emplace_back(io_, boost::posix_time::seconds(time_offset));
+  boost::asio::deadline_timer & t = timers_.back();
+
+  t.async_wait([timer_id = this->timer_id_, this](const boost::system::error_code& e) {
+    if (!e) {
+      this->ledger_->OnTimer(timer_id);
+    }
+    else if (e == boost::asio::error::operation_aborted) {
+      //timer has been cancelled
+    }
+    else
+    { //error
+    }
+  });
+
+  timer_threads_.emplace_back([&]() {io_.run(); });
+  timer_id = timer_id_;
+}
+
+void BraveRewardsServiceImpl::Cancel_All_Timers() {
+  std::lock_guard<std::mutex> lk(timer_mx_);
+  for (auto & t : timers_)
+  {
+    t.cancel();
+  }
+
+  for (auto & t : timer_threads_)
+  {
+    t.join();
+  }
+
+  timers_.clear();
+  timer_threads_.clear();
+}
+
+
+void BraveRewardsServiceImpl::SavePublishersList(const std::string& publisher_state, ledger::LedgerCallbackHandler* handler) {
+  //TODO: save it
+  handler->OnPublishersListSaved(ledger::Result::ERROR);
 }
 
 }  // namespace brave_rewards
