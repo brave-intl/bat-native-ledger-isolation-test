@@ -54,8 +54,7 @@ namespace brave_rewards {
 namespace {
 
 void GetLocalMonthYear(ledger::PUBLISHER_MONTH& month, std::string& year) {
-  auto now = std::chrono::system_clock::now();
-  time_t tt = std::chrono::system_clock::to_time_t(now);
+  time_t tt = std::time(nullptr);
   tm tm1;
   localtime_s(&tm1, &tt);
   year = std::to_string(tm1.tm_year + 1900);
@@ -179,11 +178,12 @@ BraveRewardsServiceImpl::BraveRewardsServiceImpl(Profile* profile) :
     publisher_state_path_(profile_->GetPath().append("\\publisher_state")),
     publisher_info_db_path_(profile->GetPath().append("\\publisher_info")),
     publisher_info_backend_(new PublisherInfoBackend(publisher_info_db_path_)),
-    timer_id_ (0u){
+    timer_id_ (0u),
+    max_number_timers_ (2u)
+{
 }
 
 BraveRewardsServiceImpl::~BraveRewardsServiceImpl() {
-  Cancel_All_Timers();
 }
 
 void BraveRewardsServiceImpl::Init() {
@@ -591,19 +591,21 @@ std::unique_ptr<ledger::LedgerURLLoader> BraveRewardsServiceImpl::LoadURL(const 
 
   FetchCallback callback = std::bind(&ledger::LedgerCallbackHandler::OnURLRequestResponse, handler, next_id, std::placeholders::_1, std::placeholders::_2);
 
+  std::lock_guard<std::mutex> lk(vec_mx_);
   fetchers_[fetcher] = callback;
-
   std::unique_ptr<ledger::LedgerURLLoader> loader(new LedgerURLLoaderImpl(next_id++, fetcher));
-
   return loader;
 }
 
 void BraveRewardsServiceImpl::OnURLFetchComplete(const bat_ledger_urlfetcher::URLFetcher* source) {
+
+  std::unique_lock<std::mutex> lk(vec_mx_);
   if (fetchers_.find(source) == fetchers_.end())
     return;
 
   auto callback = fetchers_[source];
   fetchers_.erase(source);
+  lk.unlock();
 
   int response_code = source->GetResponseCode();
   std::string body;
@@ -692,7 +694,6 @@ void BraveRewardsServiceImpl::RunTask(
 
 
 void BraveRewardsServiceImpl::TestingJoinAllRunningTasks() {
-
   while (true)
   {
     std::unique_lock<std::mutex> lk(vec_mx_);
@@ -719,47 +720,51 @@ void BraveRewardsServiceImpl::TriggerOnWalletInitialized(int error_code) {
 }
 
 void BraveRewardsServiceImpl::SetTimer(uint64_t time_offset, uint32_t & timer_id) {
-  std::lock_guard<std::mutex> lk(timer_mx_);
-  timer_id_++;
+  std::unique_lock<std::mutex> lk(timer_mx_);
+
+  //don't set more timers than allowed, otherwise TestingJoinAllRunningTasks can wait forever
+  if (timer_id_ == max_number_timers_) {
+    std::cout << std::endl << "timers limit has been exceeded: " << max_number_timers_ << std::endl;
+    return;
+  }
+
+  timer_id = ++timer_id_;
   timers_.emplace_back(io_, boost::posix_time::seconds(time_offset));
   boost::asio::deadline_timer & t = timers_.back();
+  lk.unlock();
 
-  t.async_wait([timer_id = this->timer_id_, this](const boost::system::error_code& e) {
+  t.async_wait([timer_id, this](const boost::system::error_code& e) {
     if (!e) {
-      this->ledger_->OnTimer(timer_id);
+      std::cout << std::endl << "timer expired: " << timer_id << std::endl;
+      ledger_->OnTimer(timer_id);
     }
     else if (e == boost::asio::error::operation_aborted) {
-      //timer has been cancelled
+      std::cout << std::endl << "timer has been cancelled: " << timer_id << std::endl;
     }
     else
     { //error
+      std::cout << std::endl << "timer error: " << timer_id << std::endl;
     }
   });
 
-  timer_threads_.emplace_back([&]() {io_.run(); });
-  timer_id = timer_id_;
+  bat_ledger::LedgerTaskRunnerImpl::Task t1 = [time_offset,timer_id,this]() {
+    std::cout << std::endl << "timer wait thread started: " << time_offset<< ">>>"  << timer_id << std::endl;
+    io_.run();
+    io_.reset();
+    std::cout << std::endl << "timer wait thread ended: " << time_offset << ">>>" << timer_id << std::endl;
+  };
+  std::unique_ptr<ledger::LedgerTaskRunner> task(new bat_ledger::LedgerTaskRunnerImpl(t1));
+  RunTask(std::move(task));
 }
 
-void BraveRewardsServiceImpl::Cancel_All_Timers() {
-  std::lock_guard<std::mutex> lk(timer_mx_);
-  for (auto & t : timers_)
-  {
-    t.cancel();
-  }
-
-  for (auto & t : timer_threads_)
-  {
-    t.join();
-  }
-
-  timers_.clear();
-  timer_threads_.clear();
+void BraveRewardsServiceImpl::AllowTimersRun(uint32_t timers) {
+  max_number_timers_ = timers;
 }
 
 
 void BraveRewardsServiceImpl::SavePublishersList(const std::string& publisher_state, ledger::LedgerCallbackHandler* handler) {
   //TODO: save it
-  handler->OnPublishersListSaved(ledger::Result::ERROR);
+  handler->OnPublishersListSaved(ledger::Result::OK);
 }
 
 }  // namespace brave_rewards

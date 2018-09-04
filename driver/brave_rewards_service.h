@@ -80,8 +80,10 @@ public:
   virtual bool GetPublisherAllowNonVerified() const = 0;
   virtual double GetContributionAmount() const = 0;
   virtual bool GetBalanceReport(ledger::BalanceReportInfo* report_info) const = 0;
+
   //Testing
   virtual void TestingJoinAllRunningTasks() = 0;
+  virtual void AllowTimersRun(uint32_t timers) = 0;
 
 
   //helpers//////////////////////////////////////////////////////////////////////////////////

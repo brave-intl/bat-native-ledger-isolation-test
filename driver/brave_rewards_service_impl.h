@@ -123,7 +123,11 @@ public:
 
   void SavePublishersList(const std::string& publisher_state,ledger::LedgerCallbackHandler* handler) override;
 
-  void TestingJoinAllRunningTasks();
+  //testing
+  void TestingJoinAllRunningTasks() override;
+
+  //timers: allow only a total number of timers to run
+  void AllowTimersRun(uint32_t timers) override;
 
 private:
   typedef std::function<void(int, const std::string&)> FetchCallback;
@@ -207,13 +211,11 @@ private:
 
 
   //timers implementation
-  void Cancel_All_Timers();
   std::vector <boost::asio::deadline_timer> timers_;
-  std::vector <std::thread> timer_threads_;
   boost::asio::io_service io_;
-  uint32_t timer_id_ = 0u;
+  std::atomic<uint32_t> timer_id_ = 0u;
   std::mutex timer_mx_;
-
+  uint32_t max_number_timers_ = 2u;
 };
 
 }  // namespace brave_rewards

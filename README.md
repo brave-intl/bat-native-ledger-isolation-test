@@ -35,5 +35,12 @@ To bring all the dependencies, to switch to the right commit and to apply patche
 
 ## Testing:
 
-The bat-native-ledger library is using threads to run tasks and callbacks. 
+* The bat-native-ledger library is using threads to run tasks and callbacks. 
 Use **BraveRewardsService::TestingJoinAllRunningTasks()** call after each test to wait for all spawned tasks/callbacks.
+
+* **LedgerImpl::RefreshPublishersList** is using recursive timer to download a fresh verified publishers list. In this case there will always be a timer waiting task running in background 
+and **BraveRewardsService::TestingJoinAllRunningTasks()** will wait forever. Call **BraveRewardsService::AllowTimersRun(number_of_timers)** before **BraveRewardsService::Init()**
+to allow a maximum number of timers iterations to run. 
+
+
+
