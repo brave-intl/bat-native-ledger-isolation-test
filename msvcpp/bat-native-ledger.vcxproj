@@ -50,6 +50,7 @@
     <ClInclude Include="$(Ledger)include\bat\ledger\wallet_info.h" />
     <ClInclude Include="$(Ledger)include\bat\ledger\balance_report_info.h" />
     <ClInclude Include="$(Ledger)include\bat\ledger\grant.h" />
+    <ClInclude Include="..\bat-native-ledger\include\bat\ledger\media_publisher_info.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="anonize2.vcxproj">
