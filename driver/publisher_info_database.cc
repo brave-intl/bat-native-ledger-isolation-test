@@ -66,16 +66,18 @@ bool PublisherInfoDatabase::Init() {
     if (!CreatePublisherInfoTable() || !CreateContributionInfoTable())
       return false;
 
-    CreateContributionInfoIndex();
+    bool index_created = CreateContributionInfoIndex();
+    if (index_created != true)
+      return false;
 
     // Version check.
     bool version_status = EnsureCurrentVersion();
     if (version_status != true)
-      return version_status;
+      return false;
 
     *db_ << "commit;"; // commit all the changes.
 
-                        /*
+    /*
     memory_pressure_listener_.reset(new base::MemoryPressureListener(
         base::Bind(&PublisherInfoDatabase::OnMemoryPressure,
         base::Unretained(this))));
@@ -138,7 +140,7 @@ bool PublisherInfoDatabase::CreateContributionInfoIndex() {
   //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   bool succeded = false;
   try {
-    *db_ << "CREATE INDEX IF NOT EXISTS contribution_info_publisher_id_index " << "ON contribution_info (publisher_id)";
+    *db_ << "CREATE INDEX IF NOT EXISTS contribution_info_publisher_id_index ON contribution_info (publisher_id);";
     succeded = true;
   }
   catch (sqlite::sqlite_exception e)
@@ -213,7 +215,7 @@ bool PublisherInfoDatabase::InsertOrUpdatePublisherInfo(
     ps << info.favIconURL;
 
     ps.execute();
-    ps.used(false); //to execute even if it was used
+    ps.used(true); //to execute even if it was used
     succeded = true;
   }
   catch (sqlite::sqlite_exception e)
@@ -229,6 +231,7 @@ bool PublisherInfoDatabase::Find(int start,
   const ledger::PublisherInfoFilter& filter,
   ledger::PublisherInfoList* list) {
   //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  bool succeded = false;
 
   if (list == nullptr) {
     return false;
@@ -246,8 +249,7 @@ bool PublisherInfoDatabase::Find(int start,
     "WHERE 1 = 1";
 
   if (!filter.id.empty()) {
-    query << " AND id = ";
-    query << filter.id;
+    query << " AND id = \'" << filter.id << "\'";
   }
 
   if (filter.category != ledger::PUBLISHER_CATEGORY::ALL_CATEGORIES) {
@@ -265,15 +267,17 @@ bool PublisherInfoDatabase::Find(int start,
     query << filter.year;
   }
 
-  if (start > 1)
-    query << " OFFSET " << std::to_string(start);
-
-  if (limit > 0)
-    query << " LIMIT " + std::to_string(limit);
-
   for (const auto& it : filter.order_by) {
     query << " ORDER BY " << it.first;
-    query << (it.second ? "ASC" : "DESC");
+    query << (it.second ? " ASC" : " DESC");
+  }
+
+  if (limit > 0)
+  {
+    query << " LIMIT " << limit;
+
+    if (start > 1)
+      query << " OFFSET " << start;
   }
 
   try
@@ -293,13 +297,16 @@ bool PublisherInfoDatabase::Find(int start,
       info.favIconURL = _favurl;
       list->push_back(info);
     };
+
+    succeded = true;
   }
   catch (sqlite::sqlite_exception e)
   {
     std::cout << "Unexpected error " << e.what() << std::endl;
+    succeded = false;
   }
 
-  return list;
+  return succeded;
 }
 
 // static
