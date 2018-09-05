@@ -86,4 +86,8 @@ namespace bat_ledger_urlfetcher
     return std::make_unique <URLFetcher>(url, metod,url_delegate);
   }
 
+  void URLFetcher::GetUrl(std::string & url) const {
+    url = url_;
+  }
+
 };

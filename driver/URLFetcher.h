@@ -45,6 +45,7 @@ namespace bat_ledger_urlfetcher
     void SetUploadData(const std::string & contentType, const std::string & content);
     void GetResponseAsString(std::string * response) const;
     bool GetStatus() const;
+    void GetUrl(std::string & url) const;
 
     static std::unique_ptr <URLFetcher> Create(const std::string & url, ledger::URL_METHOD metod, URLFetcherDelegate * url_delegate);
   private:

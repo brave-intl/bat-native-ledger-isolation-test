@@ -101,12 +101,13 @@
       <PreprocessorDefinitions>CURL_STATICLIB;COM_NO_WINDOWS_H;NOGDI;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;$(SqlLiteRoot);$(ModernSqlLite);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;sqllite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -118,12 +119,13 @@
       <PreprocessorDefinitions>CURL_STATICLIB;COM_NO_WINDOWS_H;NOGDI;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;$(SqlLiteRoot);$(ModernSqlLite);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;sqllite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,14 +139,15 @@
       <PreprocessorDefinitions>CURL_STATICLIB;COM_NO_WINDOWS_H;NOGDI;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;$(SqlLiteRoot);$(ModernSqlLite);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;sqllite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,14 +161,15 @@
       <PreprocessorDefinitions>CURL_STATICLIB;COM_NO_WINDOWS_H;NOGDI;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Libcurl)include;$(Ledger)include;$(Ledger)src;$(LeveldbRoot)include;$(SqlLiteRoot);$(ModernSqlLite);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;ssl.lib;crypto.lib;relic_s.lib;bip39wally-core-native.lib;anonize2.lib;leveldb.lib;snappy.lib;bat-native-tweetnacl.lib;bat-native-ledger.lib;Ws2_32.lib;Wldap32.lib;sqllite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -173,7 +177,9 @@
     <ClInclude Include="brave_rewards_service_impl.h" />
     <ClInclude Include="brave_rewards_service_observer.h" />
     <ClInclude Include="content_site.h" />
+    <ClInclude Include="media_publisher_info_backend.h" />
     <ClInclude Include="publisher_info_backend.h" />
+    <ClInclude Include="publisher_info_database.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="URLFetcher.h" />
@@ -183,7 +189,9 @@
     <ClCompile Include="brave_rewards_service_impl.cc" />
     <ClCompile Include="content_site.cc" />
     <ClCompile Include="driver.cpp" />
+    <ClCompile Include="media_publisher_info_backend.cc" />
     <ClCompile Include="publisher_info_backend.cc" />
+    <ClCompile Include="publisher_info_database.cc" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

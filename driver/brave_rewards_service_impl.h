@@ -51,12 +51,15 @@ public:
 
 namespace brave_rewards {
 
-class PublisherInfoBackend;
+class PublisherInfoDatabase;
+class MediaPublisherInfoBackend;
 
 class BraveRewardsServiceImpl : public BraveRewardsService,
                             public ledger::LedgerClient ,public bat_ledger_urlfetcher::URLFetcherDelegate /*,public base::SupportsWeakPtr<BraveRewardsServiceImpl>*/
 {
 public:
+  static bool IsMediaLink(const std::string& url, const std::string& first_party_url, const std::string& referrer);
+
   BraveRewardsServiceImpl(Profile* profile);
   ~BraveRewardsServiceImpl() override;
 
@@ -85,6 +88,8 @@ public:
   void OnXHRLoad(uint32_t tab_id,
       const std::string & url, const std::string& first_party_url,
       const std::string& referrer) override;
+  void OnPostData(const std::string & url, const std::string& first_party_url,
+      const std::string& referrer, const std::string& post_data) override;
   /*void SaveVisit(const std::string& publisher,
                  uint64_t duration,
                  bool ignoreMinTime) override;*/
@@ -107,21 +112,24 @@ public:
 
   void SavePublisherInfo(std::unique_ptr<ledger::PublisherInfo> publisher_info,
                  ledger::PublisherInfoCallback callback) override;
-  void LoadPublisherInfo(const std::string& publisher_key,
+  void LoadPublisherInfo(ledger::PublisherInfoFilter filter,
                  ledger::PublisherInfoCallback callback) override;
+  void LoadMediaPublisherInfo(const std::string& publisher_id,
+                              ledger::MediaPublisherInfoCallback callback) override;
+  void SaveMediaPublisherInfo(std::unique_ptr<ledger::MediaPublisherInfo> media_publisher_info,
+                                ledger::MediaPublisherInfoCallback callback) override;
   void LoadPublisherInfoList(
       uint32_t start,
       uint32_t limit,
       ledger::PublisherInfoFilter filter,
-      const std::vector<std::string>& prefix,
       ledger::GetPublisherInfoListCallback callback) override;
+
   void GetPublisherInfoList(uint32_t start,
                           uint32_t limit,
                           const ledger::PublisherInfoFilter& filter,
                           ledger::GetPublisherInfoListCallback callback) override;
   std::vector<ledger::ContributionInfo> GetRecurringDonationPublisherInfo() override;
 
-  void SavePublishersList(const std::string& publisher_state,ledger::LedgerCallbackHandler* handler) override;
 
   //testing
   void TestingJoinAllRunningTasks() override;
@@ -130,7 +138,7 @@ public:
   void AllowTimersRun(uint32_t timers) override;
 
 private:
-  typedef std::function<void(int, const std::string&)> FetchCallback;
+  typedef std::function<void(const std::string&, int, const std::string& )> FetchCallback;
 
   void OnLedgerStateSaved(ledger::LedgerCallbackHandler* handler,bool success);
 
@@ -145,7 +153,12 @@ private:
                             std::shared_ptr<ledger::PublisherInfo> info,
                             bool success);
   void OnPublisherInfoLoaded(ledger::PublisherInfoCallback callback,
-                             std::shared_ptr<ledger::PublisherInfo> info);
+                            const ledger::PublisherInfoList list);
+  void OnMediaPublisherInfoLoaded(ledger::MediaPublisherInfoCallback callback,
+                            std::shared_ptr<ledger::MediaPublisherInfo> info);
+  void OnMediaPublisherInfoSaved(ledger::MediaPublisherInfoCallback callback,
+                            std::shared_ptr<ledger::MediaPublisherInfo> info,
+                            bool success);
   void OnPublisherInfoListLoaded(uint32_t start,
                                  uint32_t limit,
                                  ledger::GetPublisherInfoListCallback callback,
@@ -196,6 +209,10 @@ private:
 
   uint64_t GetCurrentTimeStamp();
 
+  void SavePublishersList(const std::string& publisher_state,
+    ledger::LedgerCallbackHandler* handler) override;
+
+
   Profile* profile_;  // NOT OWNED
   std::unique_ptr<ledger::Ledger> ledger_;
   //const scoped_refptr<base::SequencedTaskRunner> file_task_runner_;
@@ -205,7 +222,9 @@ private:
   const std::string ledger_state_path_;
   const std::string publisher_state_path_;
   const std::string publisher_info_db_path_;
-  std::unique_ptr<PublisherInfoBackend> publisher_info_backend_;
+  const std::string media_publisher_info_db_path_;
+  std::unique_ptr<PublisherInfoDatabase> publisher_info_backend_;
+  std::unique_ptr<MediaPublisherInfoBackend> media_publisher_info_backend_;
 
   std::map<const bat_ledger_urlfetcher::URLFetcher*, FetchCallback> fetchers_;
 
