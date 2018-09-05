@@ -24,6 +24,7 @@ set boringssl_commit=0080d83b9faf8dd325f5f5f92eb56faa93864e4c
 set curl_commit=7212c4cd607af889c9adc47030a84b6f8ac3b0f6 
 set leveldb_commit=ad834a20a651ebcabf7c03a88712e780a965d4e3 
 set snappy_commit=4f7bd2dbfd12bfda77488baf46c2f7648c9f1999 
+set sqlite_modern_commit=1937817c1a6d9bcca19bf6e705cf6df4a1fe404d
 
 git submodule update --init --recursive
 
@@ -62,5 +63,8 @@ cd %ROOT%\snappy
 git checkout  %snappy_commit%
 copy /Y %PATCHES%\snappy\config.h .
 copy /Y %PATCHES%\snappy\snappy-stubs-public.h .
+
+cd %ROOT%\sqlite_modern_cpp 
+git checkout  %sqlite_modern_commit%
 
 cd %ROOT%

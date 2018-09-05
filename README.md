@@ -21,6 +21,8 @@ Switching to a newer commit is possible but will require some work to put it tog
 * **curl**: master/7212c4cd607af889c9adc47030a84b6f8ac3b0f6 
 * **leveldb**: windows/ad834a20a651ebcabf7c03a88712e780a965d4e3 
 * **snappy**: master/4f7bd2dbfd12bfda77488baf46c2f7648c9f1999 
+* **SqliteModernCpp**: master/1937817c1a6d9bcca19bf6e705cf6df4a1fe404d
+* **sqlite**: version 3.24.0
 
 Switching to a new commit will also require updating this **README.md** and **pull-depends.bat** files.
 
