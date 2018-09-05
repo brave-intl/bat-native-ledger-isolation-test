@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver", "driver\driver.vcxproj", "{149DE8BF-C9A9-4396-8AE2-B153F36F1E4B}"
 	ProjectSection(ProjectDependencies) = postProject
+		{8290704A-6BCC-4B9D-BCD5-5E4FFBDB4C1A} = {8290704A-6BCC-4B9D-BCD5-5E4FFBDB4C1A}
 		{999B40C2-1980-3C3E-8C0B-C1A17D7A40BF} = {999B40C2-1980-3C3E-8C0B-C1A17D7A40BF}
 	EndProjectSection
 EndProject

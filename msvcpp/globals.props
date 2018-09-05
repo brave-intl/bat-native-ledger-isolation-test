@@ -16,6 +16,8 @@
     <Boost>C:\lib\boost_1_67_0\</Boost>
     <Libcurl>$(Root)curl\</Libcurl>
     <Curlcpp>$(Root)curlcpp\</Curlcpp>
+    <SqlLiteRoot>$(Root)sqllite\</SqlLiteRoot>
+    <ModernSqlLite>$(Root)sqlite_modern_cpp\hdr</ModernSqlLite>
   </PropertyGroup>
   <PropertyGroup>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
@@ -71,6 +73,12 @@
     </BuildMacro>
     <BuildMacro Include="Curlcpp">
       <Value>$(Curlcpp)</Value>
+    </BuildMacro>
+    <BuildMacro Include="SqlLiteRoot">
+      <Value>$(SqlLiteRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ModernSqlLite">
+      <Value>$(ModernSqlLite)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
