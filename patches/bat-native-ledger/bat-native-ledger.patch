@@ -84,3 +84,28 @@ index d963a70..e01ffb9 100644
  #endif
    }
  
+diff --git a/src/bat_helper_platform.h b/src/bat_helper_platform.h
+index 660f197..017b261 100644
+--- a/src/bat_helper_platform.h
++++ b/src/bat_helper_platform.h
+@@ -13,9 +13,20 @@
+ //TODO: implement!
+ #include <iostream>
+ #include <cassert>
++#include <string>
+ 
+ #define DCHECK assert
+ #define LOG(LEVEL) std::cerr<< std::endl<< #LEVEL << ": "
+ #endif
+ 
++
++namespace braveledger_bat_helper {
++
++  void DecodeURLChars(const std::string& input, std::string& output);
++  void encodeURIComponent(const std::string & instr, std::string & outstr);
++  void getHomeDir(std::string& home);
++  void appendPath(const std::string& root, const std::string& leaf, std::string & path);
++
++} //namespace braveledger_bat_helper
++
+ #endif  //BRAVELEDGER_BAT_HELPER_PLATFORM_H_
