@@ -16,10 +16,18 @@
 #include <functional>
 #include "brave_rewards_service_observer.h"
 #include "bat/ledger/ledger.h"
+#include "balance_report.h"
 
 namespace brave_rewards {
 
+bool IsMediaLink(const std::string & url,
+                 const std::string & first_party_url,
+                 const std::string & referrer);
+
 class BraveRewardsServiceObserver;
+
+
+using GetContentSiteListCallback = std::function<void(std::unique_ptr<ContentSiteList>, uint32_t /* next_record */)>;
 
 class KeyedService {
 public:
@@ -43,13 +51,18 @@ public:
 
   // Ledger interface:///////////////////////////////////////////////////////////////
   virtual void CreateWallet() = 0;
+  virtual void GetWalletProperties() = 0;
+  virtual void GetContentSiteList(uint32_t start,
+                                  uint32_t limit,
+                                const GetContentSiteListCallback& callback) = 0;
+  virtual void GetGrant(const std::string& lang, const std::string& paymentId) = 0;
+  virtual void GetGrantCaptcha() = 0;
+  virtual void SolveGrantCaptcha(const std::string& solution) const = 0;
+  virtual std::string GetWalletPassphrase() const = 0;
+  virtual void RecoverWallet(const std::string passPhrase) const = 0;
 
-  virtual void MakePayment(const ledger::PaymentData& payment_data) = 0;
-  virtual void AddRecurringPayment(const std::string& publisher_id, const double& value) = 0;
-  virtual void OnLoad(const std::string& _tld,
-            const std::string& _domain,
-            const std::string& _path,
-            uint32_t tab_id) = 0;
+  virtual void OnLoad(uint32_t tab_id, const std::string & gurl) = 0;
+
   virtual void OnUnload(uint32_t tab_id) = 0;
   virtual void OnShow(uint32_t tab_id) = 0;
   virtual void OnHide(uint32_t tab_id) = 0;
@@ -58,30 +71,29 @@ public:
   virtual void OnMediaStart(uint32_t tab_id) = 0;
   virtual void OnMediaStop(uint32_t tab_id) = 0;
   virtual void OnXHRLoad(uint32_t tab_id,
-      const std::string & url, const std::string& first_party_url,
+      const std::string & url,
+	  const std::string& first_party_url,
       const std::string& referrer) = 0;
-  virtual void OnPostData(const std::string & url, const std::string& first_party_url, 
-      const std::string& referrer, const std::string& post_data) = 0;
-  /*virtual void SaveVisit(const std::string& publisher,
-                 uint64_t duration,
-                 bool ignoreMinTime) = 0;*/
+  virtual void OnPostData(uint32_t tab_id,
+                          const std::string & url,
+                          const std::string & first_party_url,
+                          const std::string & referrer,
+                          const std::string & post_data) = 0;
 
-  virtual std::vector<ledger::ContributionInfo> GetRecurringDonationPublisherInfo() = 0;
-  virtual void GetPublisherInfoList(uint32_t start,
-                                uint32_t limit,
-                                const ledger::PublisherInfoFilter& filter,
-                                ledger::GetPublisherInfoListCallback callback) = 0;
-  virtual void SetPublisherMinVisitTime(uint64_t duration_in_milliseconds) = 0;
-  virtual void SetPublisherMinVisits(unsigned int visits) = 0;
-  virtual void SetPublisherAllowNonVerified(bool allow) = 0;
-  virtual void SetContributionAmount(double amount) = 0;
-  virtual void SetBalanceReport(const ledger::BalanceReportInfo& report_info) = 0;
 
-  virtual uint64_t GetPublisherMinVisitTime() const = 0; // In milliseconds
-  virtual unsigned int GetPublisherMinVisits() const = 0;
-  virtual bool GetPublisherAllowNonVerified() const = 0;
-  virtual double GetContributionAmount() const = 0;
-  virtual bool GetBalanceReport(ledger::BalanceReportInfo* report_info) const = 0;
+  virtual uint64_t GetReconcileStamp() const = 0;
+  virtual std::map<std::string, std::string> GetAddresses() const = 0;
+
+
+  virtual void SetPublisherMinVisitTime(uint64_t duration_in_seconds) const = 0;
+  virtual void SetPublisherMinVisits(unsigned int visits) const = 0;
+  virtual void SetPublisherAllowNonVerified(bool allow) const = 0;
+  virtual void SetPublisherAllowVideos(bool allow) const = 0;
+
+  virtual void SetContributionAmount(double amount) const = 0;
+  virtual void SetAutoContribute(bool enabled) const = 0;
+
+  virtual std::map<std::string, brave_rewards::BalanceReport> GetAllBalanceReports() = 0;
 
   //Testing
   virtual void TestingJoinAllRunningTasks() = 0;

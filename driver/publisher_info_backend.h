@@ -28,11 +28,11 @@ class PublisherInfoBackend {
 
   bool Put(const std::string& key, const std::string& value);
   bool Get(const std::string& lookup, std::string* value);
+  bool Search(const std::vector<std::string>& prefixes,
+              uint32_t start, uint32_t limit,
+              std::vector<std::string>& results);
   bool Load(uint32_t start, uint32_t limit,
             std::vector<std::string>& results);
-  bool LoadWithPrefix(uint32_t start, uint32_t limit, const std::vector<std::string>& prefix,
-            std::vector<std::string>& results);
-
  private:
   bool EnsureInitialized();
   const std::string path_;

@@ -41,13 +41,31 @@ PublisherInfoDatabase::PublisherInfoDatabase(const std::string & db_path) :
 PublisherInfoDatabase::~PublisherInfoDatabase() {
 }
 
+bool PublisherInfoDatabase::MetaTableInit() {
+  bool succeded = false;
+
+  if (!initialized_)
+    return false;
+
+  try {
+    //create meta table
+    *db_ << "create table if not exists meta (key longvarchar not null unique primary key, value longvarchar);";
+    *db_ << "insert or replace into meta (key,value) values (?,?)" << "version" << GetCurrentVersion();
+    *db_ << "insert or replace into meta (key,value) values (?,?)" << "last_compatible_version" << kCompatibleVersionNumber;
+  }
+  catch (sqlite::sqlite_exception e)
+  {
+    std::cout << "sqlite_exception: " << e.what() << std::endl;
+    succeded = false;
+  }
+}
+
 bool PublisherInfoDatabase::Init() {
   //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   if (initialized_)
     return true;
   bool transactionStarted = false;
-
 
   try {
 
@@ -58,17 +76,16 @@ bool PublisherInfoDatabase::Init() {
     *db_ << "begin;"; // begin a transaction ...
     transactionStarted = true;
 
-    //create meta table
-    *db_ << "create table if not exists meta (key longvarchar not null unique primary key, value longvarchar);";
-    *db_ << "insert or replace into meta (key,value) values (?,?)" << "version" << GetCurrentVersion();
-    *db_ << "insert or replace into meta (key,value) values (?,?)" << "last_compatible_version" << kCompatibleVersionNumber;
-
-    if (!CreatePublisherInfoTable() || !CreateContributionInfoTable())
+    if (!CreatePublisherInfoTable() ||
+      !CreateContributionInfoTable() ||
+      !CreateActivityInfoTable() ||
+      !CreateMediaPublisherInfoTable())
       return false;
 
-    bool index_created = CreateContributionInfoIndex();
-    if (index_created != true)
-      return false;
+    CreateContributionInfoIndex();
+    CreateActivityInfoIndex();
+
+
 
     // Version check.
     bool version_status = EnsureCurrentVersion();
@@ -86,17 +103,10 @@ bool PublisherInfoDatabase::Init() {
     initialized_ = true;
     return initialized_;
   }
-  catch (sqlite::sqlite_exception e)
+  //catch all exceptions
+  catch (std::exception & e)
   {
-    std::cout << "Unexpected error " << e.what() << std::endl;
-    initialized_ = false;
-    if (transactionStarted) {
-      *db_ << "rollback;"; // commit all the changes.
-    }
-  }
-  catch (...)
-  {
-    std::cout << "Unknown error\n";
+    std::cout << "std::exception: " << e.what() << std::endl;
     initialized_ = false;
     if (transactionStarted) {
       *db_ << "rollback;"; // commit all the changes.
@@ -113,23 +123,25 @@ bool PublisherInfoDatabase::CreateContributionInfoTable() {
 
   // Note: revise implementation for InsertOrUpdateRowByID() if you add any
   // new constraints to the schema.
-  std::string sql;
-  sql.append("create table if not exists ");
-  sql.append(name);
-  sql.append(
-    "("
-    "publisher_id LONGVARCHAR NOT NULL,"
+  std::ostringstream sql;
+
+  sql << "create table if not exists " <<  name <<
+    " (publisher_id LONGVARCHAR NOT NULL,"
     "value DOUBLE DEFAULT 0 NOT NULL,"
-    "date INTEGER DEFAULT 0 NOT NULL);");
+    "date INTEGER DEFAULT 0 NOT NULL,"
+    "CONSTRAINT fk_contribution_info_publisher_id"
+    "    FOREIGN KEY (publisher_id)"
+    "    REFERENCES publisher_info (publisher_id)"
+    "    ON DELETE CASCADE)";
 
   try
   {
-    *db_ << sql.c_str();
+    *db_ << sql.str().c_str();
     succeded = true;
   }
   catch (sqlite::sqlite_exception e)
   {
-    std::cout << "Unexpected error " << e.what() << std::endl;
+    std::cout << "sqlite_exception:" << e.what() << std::endl;
     succeded = false;
   }
 
@@ -145,7 +157,7 @@ bool PublisherInfoDatabase::CreateContributionInfoIndex() {
   }
   catch (sqlite::sqlite_exception e)
   {
-    std::cout << "Unexpected error " << e.what() << std::endl;
+    std::cout << "sqlite_exception:" << e.what() << std::endl;
     succeded = false;
   }
   return succeded;
@@ -157,35 +169,107 @@ bool PublisherInfoDatabase::CreatePublisherInfoTable() {
   const char* name = "publisher_info";
 
   // Update InsertOrUpdatePublisherInfo() if you add anything here
-  std::string sql;
-  sql.append("CREATE TABLE IF NOT EXISTS ");
-  sql.append(name);
-  sql.append(
-      "("
-      "id LONGVARCHAR PRIMARY KEY,"
-      "duration INTEGER DEFAULT 0 NOT NULL,"
-      "score DOUBLE DEFAULT 0 NOT NULL,"
-      "pinned BOOLEAN DEFAULT 0 NOT NULL,"
-      "percent INTEGER DEFAULT 0 NOT NULL,"
-      "weight DOUBLE DEFAULT 0 NOT NULL,"
-      "excluded BOOLEAN DEFAULT 0 NOT NULL,"
-      "category INTEGER NOT NULL,"
-      "month INTEGER NOT NULL,"
-      "year INTEGER NOT NULL,"
-      "favIconURL LONGVARCHAR DEFAULT '' NOT NULL)");
+  std::ostringstream sql;
+  sql<<"CREATE TABLE IF NOT EXISTS " << name <<
+    " (publisher_id LONGVARCHAR PRIMARY KEY NOT NULL UNIQUE,"
+    "verified BOOLEAN DEFAULT 0 NOT NULL,"
+    "excluded INTEGER DEFAULT 0 NOT NULL,"
+    "name TEXT NOT NULL,"
+    "favIcon TEXT NOT NULL,"
+    "url TEXT NOT NULL,"
+    "provider TEXT NOT NULL)";
 
   try {
-    *db_ << sql.c_str();
+    *db_ << sql.str().c_str();
     succeded = true;
   }
   catch (sqlite::sqlite_exception e)
   {
-    std::cout << "Unexpected error " << e.what() << std::endl;
+    std::cout << "sqlite_exception: " << e.what() << std::endl;
     succeded = false;
   }
   return succeded;
 }
 
+
+bool PublisherInfoDatabase::CreateActivityInfoTable() {
+  //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  bool succeded = false;
+  const char* name = "activity_info";
+
+  // Update InsertOrUpdatePublisherInfo() if you add anything here
+  std::ostringstream sql;
+  sql << "CREATE TABLE IF NOT EXISTS " << name <<
+    " (publisher_id LONGVARCHAR NOT NULL,"
+    "duration INTEGER DEFAULT 0 NOT NULL,"
+    "score DOUBLE DEFAULT 0 NOT NULL,"
+    "percent INTEGER DEFAULT 0 NOT NULL,"
+    "weight DOUBLE DEFAULT 0 NOT NULL,"
+    "category INTEGER NOT NULL,"
+    "month INTEGER NOT NULL,"
+    "year INTEGER NOT NULL,"
+    "CONSTRAINT fk_activity_info_publisher_id"
+    "    FOREIGN KEY (publisher_id)"
+    "    REFERENCES publisher_info (publisher_id)"
+    "    ON DELETE CASCADE)";
+
+  try {
+    *db_ << sql.str().c_str();
+    succeded = true;
+  }
+  catch (sqlite::sqlite_exception e)
+  {
+    std::cout << "sqlite_exception: " << e.what() << std::endl;
+    succeded = false;
+  }
+  return succeded;
+}
+
+
+bool PublisherInfoDatabase::CreateActivityInfoIndex() {
+  //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  bool succeded = false;
+  try {
+    *db_ << "CREATE INDEX IF NOT EXISTS activity_info_publisher_id_index "  <<    "ON activity_info (publisher_id)";
+    succeded = true;
+  }
+  catch (sqlite::sqlite_exception e)
+  {
+    std::cout << "sqlite_exception: " << e.what() << std::endl;
+    succeded = false;
+  }
+  return succeded;
+}
+
+
+bool PublisherInfoDatabase::CreateMediaPublisherInfoTable() {
+  //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  bool succeded = false;
+  const char* name = "media_publisher_info";
+
+  // Update InsertOrUpdatePublisherInfo() if you add anything here
+  std::ostringstream sql;
+  sql << "CREATE TABLE IF NOT EXISTS " << name <<
+    " (media_key TEXT NOT NULL PRIMARY KEY UNIQUE,"
+    "publisher_id LONGVARCHAR NOT NULL,"
+    "CONSTRAINT fk_media_publisher_info_publisher_id"
+    "    FOREIGN KEY (publisher_id)"
+    "    REFERENCES publisher_info (publisher_id)"
+    "    ON DELETE CASCADE)";
+
+  try {
+    *db_ << sql.str().c_str();
+    succeded = true;
+  }
+  catch (sqlite::sqlite_exception e)
+  {
+    std::cout << "sqlite_exception: " << e.what() << std::endl;
+    succeded = false;
+  }
+  return succeded;
+}
+
+/////////
 bool PublisherInfoDatabase::InsertOrUpdatePublisherInfo(
     const ledger::PublisherInfo& info) {
   //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
@@ -195,28 +279,88 @@ bool PublisherInfoDatabase::InsertOrUpdatePublisherInfo(
     bool initialized = Init();
     if (!initialized)
       return false;
+    {
+      auto ps = *db_ <<
+        "INSERT OR REPLACE INTO publisher_info "
+        "(publisher_id, verified, excluded, "
+        "name, url, provider, favIcon) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    auto ps = *db_ <<
-      "INSERT OR REPLACE INTO publisher_info "
-      "(id, duration, score, pinned, percent, "
-      "weight, excluded, category, month, year, favIconURL) "
-      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+      ps << info.id;
+      ps << info.verified;
+      ps << static_cast<int>(info.excluded);
+      ps << info.name;
+      ps << info.url;
+      ps << info.provider;
+      ps << info.favicon_url;
 
-    ps << info.id;
-    ps << (int)info.duration;
-    ps << info.score;
-    ps << info.pinned;
-    ps << (int)info.percent;
-    ps << info.weight;
-    ps << info.excluded;
-    ps << info.category;
-    ps << info.month;
-    ps << info.year;
-    ps << info.favIconURL;
+      ps.execute();
+      ps.used(true); //to execute even if it was used
 
-    ps.execute();
-    ps.used(true); //to execute even if it was used
-    succeded = true;
+      if (!info.month || !info.year) {
+        return true;
+      }
+    }
+
+    ///////////////////////////////////////////////////////
+    {
+      auto ps1 = *db_ << "SELECT publisher_id FROM activity_info WHERE " <<
+        "publisher_id=? AND category=? AND month=? AND year=?";
+
+      ps1 << info.id;
+      ps1 << info.category;
+      ps1 << info.month;
+      ps1 << info.year;
+      bool row_exixst = false;
+      ps1 >> [&]() {
+        row_exixst = true;
+      };
+
+      ps1++;
+      ps1.used(true);
+
+      if (row_exixst)
+      {
+        auto ps2 = *db_ << "UPDATE activity_info SET " <<
+          "duration=?, score=?, percent=?, " <<
+          "weight=? WHERE " <<
+          "publisher_id=? AND category=? " <<
+          "AND month=? AND year=?";
+
+        ps2 << info.duration;
+        ps2 << info.score;
+        ps2 << info.percent;
+        ps2 << info.weight;
+        ps2 << info.id;
+        ps2 << info.category;
+        ps2 << info.month;
+        ps2 << info.year;
+
+        ps2.execute();
+        ps2.used(true);
+        return true;
+      }
+    }
+
+    ///////////////////////////////////////////////////////
+
+    auto ps3 = *db_ << "INSERT INTO activity_info " <<
+      "(publisher_id, duration, score, percent, " <<
+      "weight, category, month, year) " <<
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    ps3 << info.id;
+    ps3 << info.duration;
+    ps3 << info.score;
+    ps3 << info.percent;
+    ps3 << info.weight;
+    ps3 << info.category;
+    ps3 << info.month;
+    ps3 << info.year;
+
+    ps3.execute();
+    ps3.used(true);
+
   }
   catch (sqlite::sqlite_exception e)
   {
@@ -225,6 +369,65 @@ bool PublisherInfoDatabase::InsertOrUpdatePublisherInfo(
   }
   return succeded;
 }
+
+
+bool PublisherInfoDatabase::InsertOrUpdateMediaPublisherInfo(
+  const std::string& media_key, const std::string& publisher_id) {
+  //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  bool succeded = false;
+
+  bool initialized = Init();
+  if (!initialized)
+    return false;
+
+  try
+  {
+    *db_ << "INSERT OR REPLACE INTO media_publisher_info "
+      "(media_key, publisher_id) "
+      "VALUES (?, ?)" << media_key << publisher_id;
+    succeded = true;
+  }
+  catch (sqlite::sqlite_exception e)
+  {
+    std::cout << "sqlite_exception: " << e.what() << std::endl;
+    succeded = false;
+  }
+
+  return succeded;
+}
+
+
+std::unique_ptr<ledger::PublisherInfo>
+PublisherInfoDatabase::GetMediaPublisherInfo(const std::string& media_key) {
+  //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  std::unique_ptr<ledger::PublisherInfo> info;
+
+  bool initialized = Init();
+  //DCHECK(initialized);
+  if (!initialized)
+    return info;
+
+  try {
+    *db_ << "SELECT pi.publisher_id, pi.name, pi.url, pi.favIcon "
+      "FROM media_publisher_info as mpi "
+      "INNER JOIN publisher_info AS pi ON mpi.publisher_id = pi.publisher_id "
+      "WHERE mpi.media_key=?" << media_key >>
+      [&](std::string _id, std::string _name, std::string _url, std::string _favicon_url) {
+      info.reset(new ledger::PublisherInfo());
+      info->id = _id;
+      info->name = _name;
+      info->url = _url;
+      info->favicon_url = _favicon_url;
+    };
+  }
+  catch (sqlite::sqlite_exception e)
+  {
+    std::cout << "sqlite_exception: " << e.what() << std::endl;
+  }
+  return info;
+}
+
+
 
 bool PublisherInfoDatabase::Find(int start,
   int limit,
@@ -243,27 +446,29 @@ bool PublisherInfoDatabase::Find(int start,
     return false;
 
   std::ostringstream query;
-  query<< "SELECT id, duration, score, pinned, percent, "<<
-    "weight, excluded, category, month, year, favIconURL "<<
-    "FROM publisher_info "<<
+  query<< "SELECT ai.publisher_id, ai.duration, ai.score, ai.percent, "
+      "ai.weight, pi.verified, pi.excluded, ai.category, ai.month, ai.year, pi.name, "
+      "pi.url, pi.provider, pi.favIcon "
+      "FROM activity_info AS ai "
+      "INNER JOIN publisher_info AS pi ON ai.publisher_id = pi.publisher_id "
     "WHERE 1 = 1";
 
   if (!filter.id.empty()) {
-    query << " AND id = \'" << filter.id << "\'";
+    query << " AND ai.publisher_id = \'" << filter.id << "\'";
   }
 
   if (filter.category != ledger::PUBLISHER_CATEGORY::ALL_CATEGORIES) {
-    query << " AND category = ";
+    query << " AND ai.category = ";
     query << filter.category;
   }
 
   if (filter.month != ledger::PUBLISHER_MONTH::ANY) {
-    query << " AND month = ";
+    query << " AND ai.month = ";
     query << filter.month;
   }
 
   if (filter.year > 0) {
-    query << " AND year = ";
+    query << " AND ai.year = ";
     query << filter.year;
   }
 
@@ -283,18 +488,24 @@ bool PublisherInfoDatabase::Find(int start,
   try
   {
     *db_ << query.str().c_str() >>
-      [&](std::string _id, uint64_t _duration, double _score, bool _pinned, uint64_t _percent, double _weight,
-        bool _excluded, int _category, int _month, int _year, std::string _favurl) {
+      [&](std::string _id, uint64_t _duration, double _score, uint64_t _percent, double _weight,
+        bool _verified, int _excluded, int _category, int _month, int _year, std::string _name, std::string _url, std::string _provider, std::string _favurl) {
+
       ledger::PUBLISHER_MONTH month(static_cast<ledger::PUBLISHER_MONTH>(_month));
       ledger::PublisherInfo info(_id, month, _year);
+
       info.duration = _duration;
       info.score = _score;
-      info.pinned = _pinned;
       info.percent = _percent;
       info.weight = _weight;
-      info.excluded = _excluded;
+      info.verified = _verified;
+      info.excluded = static_cast<ledger::PUBLISHER_EXCLUDE>(_excluded);
       info.category = static_cast<ledger::PUBLISHER_CATEGORY>(_category);
-      info.favIconURL = _favurl;
+      info.name = _name;
+      info.url = _url;
+      info.provider = _provider;
+      info.favicon_url = _favurl;
+
       list->push_back(info);
     };
 

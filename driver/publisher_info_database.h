@@ -32,20 +32,28 @@ class PublisherInfoDatabase {
   PublisherInfoDatabase & operator = (const PublisherInfoDatabase &) = delete;
 
   bool InsertOrUpdatePublisherInfo(const ledger::PublisherInfo& info);
+  bool InsertOrUpdateMediaPublisherInfo(const std::string& media_key, const std::string& publisher_id);
+
   bool Find(int start,
             int limit,
             const ledger::PublisherInfoFilter& filter,
             ledger::PublisherInfoList* list);
+  std::unique_ptr<ledger::PublisherInfo> GetMediaPublisherInfo(
+      const std::string& media_key);
 
   // Returns the current version of the publisher info database
   static int GetCurrentVersion();
 
  private:
   bool Init();
+  bool MetaTableInit();
 
   bool CreateContributionInfoTable();
   bool CreatePublisherInfoTable();
   bool CreateContributionInfoIndex();
+  bool CreateActivityInfoTable();
+  bool CreateActivityInfoIndex();
+  bool CreateMediaPublisherInfoTable();
 
   bool EnsureCurrentVersion();
 

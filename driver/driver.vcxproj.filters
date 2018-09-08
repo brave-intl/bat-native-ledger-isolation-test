@@ -39,10 +39,13 @@
     <ClInclude Include="publisher_info_backend.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="media_publisher_info_backend.h">
+    <ClInclude Include="publisher_info_database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="publisher_info_database.h">
+    <ClInclude Include="balance_report.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wallet_properties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,10 +71,13 @@
     <ClCompile Include="publisher_info_backend.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="media_publisher_info_backend.cc">
+    <ClCompile Include="publisher_info_database.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="publisher_info_database.cc">
+    <ClCompile Include="balance_report.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wallet_properties.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
