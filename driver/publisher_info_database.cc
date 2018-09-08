@@ -58,6 +58,7 @@ bool PublisherInfoDatabase::MetaTableInit() {
     std::cout << "sqlite_exception: " << e.what() << std::endl;
     succeded = false;
   }
+  return succeded;
 }
 
 bool PublisherInfoDatabase::Init() {
