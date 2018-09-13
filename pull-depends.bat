@@ -14,18 +14,6 @@ if exist %PULLLOCKFILE% (
 
 type nul > %PULLLOCKFILE%
 
-:: Commits the solution is bound to
-set bat-native-anonize_commit=5e3e8eb137a1837a136a0d364ece01d0cdae6098
-set bat-native-ledger_commit=f2687f9a2bb8adcb0313638502296a517617fbd7
-set bat-native-rapidjson_commit=86aafe2ef89835ae71c9ed7c2527e3bb3000930e
-set bat-native-tweetnacl_commit=05ed8f82faa03609fe5ae0a4c2d454afbe2ff267
-set bip39wally-core-native_commit=e5aba371a56d3e41f7e80e868312446ce7bd434c 
-set boringssl_commit=0080d83b9faf8dd325f5f5f92eb56faa93864e4c 
-set curl_commit=7212c4cd607af889c9adc47030a84b6f8ac3b0f6 
-set leveldb_commit=ad834a20a651ebcabf7c03a88712e780a965d4e3 
-set snappy_commit=4f7bd2dbfd12bfda77488baf46c2f7648c9f1999 
-set sqlite_modern_commit=1937817c1a6d9bcca19bf6e705cf6df4a1fe404d
-
 git submodule update --init --recursive
 
 

@@ -12,7 +12,7 @@ Some of the dependencies have pre-generated configuration files and minor patche
 All libraries,including bat-native-ledger are moving forward and their interfaces are changing. The solution is bound to a particular branch/commit of each component.
 Switching to a newer commit is possible but will require some work to put it together.
 
-* **bat-native-anonize**:  win-port/5e3e8eb137a1837a136a0d364ece01d0cdae6098
+* **bat-native-anonize**:  win-port/814bc1e68626523de0f089e5c4398e87fb043f16
 * **bat-native-ledger**: master/f2687f9a2bb8adcb0313638502296a517617fbd7
 * **bat-native-rapidjson**: master/86aafe2ef89835ae71c9ed7c2527e3bb3000930e
 * **bat-native-tweetnacl**: master/05ed8f82faa03609fe5ae0a4c2d454afbe2ff267
@@ -24,7 +24,7 @@ Switching to a newer commit is possible but will require some work to put it tog
 * **SqliteModernCpp**: master/1937817c1a6d9bcca19bf6e705cf6df4a1fe404d
 * **sqlite**: version 3.24.0
 
-Switching to a new commit will also require updating this **README.md** and **pull-depends.bat** files.
+Switching to a new commit will also require updating this **README.md**.
 
 ## Prerequisites:
 
