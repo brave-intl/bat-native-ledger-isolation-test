@@ -14,7 +14,7 @@ Switching to a newer commit is possible but will require some work to put it tog
 
 * **bat-native-anonize**:  win-port/5e3e8eb137a1837a136a0d364ece01d0cdae6098
 * **bat-native-ledger**: master/f2687f9a2bb8adcb0313638502296a517617fbd7
-* **bat-native-rapidjson**: master/744b43313525a047eda4f2e2e689aa88b6c596fa
+* **bat-native-rapidjson**: master/86aafe2ef89835ae71c9ed7c2527e3bb3000930e
 * **bat-native-tweetnacl**: master/05ed8f82faa03609fe5ae0a4c2d454afbe2ff267
 * **bip39wally-core-native**: master/e5aba371a56d3e41f7e80e868312446ce7bd434c 
 * **boringssl**: master/0080d83b9faf8dd325f5f5f92eb56faa93864e4c 
