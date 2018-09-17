@@ -1,7 +1,7 @@
 [submodule "bat-native-anonize"]
 	path = bat-native-anonize
 	url = https://github.com/brave-intl/bat-native-anonize.git
-	branch = win-port
+	branch = win-port-1
 [submodule "bat-native-ledger"]
 	path = bat-native-ledger
 	url = https://github.com/brave-intl/bat-native-ledger.git

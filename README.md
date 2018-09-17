@@ -12,7 +12,7 @@ Some of the dependencies have pre-generated configuration files and minor patche
 All libraries,including bat-native-ledger are moving forward and their interfaces are changing. The solution is bound to a particular branch/commit of each component.
 Switching to a newer commit is possible but will require some work to put it together.
 
-* **bat-native-anonize**:  win-port/814bc1e68626523de0f089e5c4398e87fb043f16
+* **bat-native-anonize**:  win-port-1/fc5d0a1dca2c3e351425e37b4727f2f0af2d620a
 * **bat-native-ledger**: master/f2687f9a2bb8adcb0313638502296a517617fbd7
 * **bat-native-rapidjson**: master/86aafe2ef89835ae71c9ed7c2527e3bb3000930e
 * **bat-native-tweetnacl**: master/05ed8f82faa03609fe5ae0a4c2d454afbe2ff267
