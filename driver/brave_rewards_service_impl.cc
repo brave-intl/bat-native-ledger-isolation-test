@@ -438,7 +438,7 @@ void BraveRewardsServiceImpl::OnMediaPublisherInfoLoaded(
     ledger::PublisherInfoCallback callback,
     std::shared_ptr<ledger::PublisherInfo> info) {
 
-  ledger::Result r = (!info) ? ledger::Result::NOT_FOUND : ledger::Result::OK;
+  ledger::Result r = (!info) ? ledger::Result::NOT_FOUND : ledger::Result::LEDGER_OK;
 
   //make a copy of PublisherInfo and attach it to unique_ptr
   callback(r, std::make_unique <ledger::PublisherInfo>(*info));
@@ -568,8 +568,8 @@ void BraveRewardsServiceImpl::OnLedgerStateLoaded(
     ledger::LedgerCallbackHandler* handler,
     const std::string& data) {
 
-  handler->OnLedgerStateLoaded(data.empty() ? ledger::Result::ERROR
-                                            : ledger::Result::OK,
+  handler->OnLedgerStateLoaded(data.empty() ? ledger::Result::LEDGER_ERROR
+                                            : ledger::Result::LEDGER_OK,
                                data);
 }
 
@@ -586,8 +586,8 @@ void BraveRewardsServiceImpl::LoadPublisherState(
 void BraveRewardsServiceImpl::OnPublisherStateLoaded(
     ledger::LedgerCallbackHandler* handler,
     const std::string& data) {
-  handler->OnPublisherStateLoaded(data.empty() ? ledger::Result::ERROR
-                                               : ledger::Result::OK,
+  handler->OnPublisherStateLoaded(data.empty() ? ledger::Result::LEDGER_ERROR
+                                               : ledger::Result::LEDGER_OK,
                                   data);
 }
 
@@ -629,8 +629,8 @@ void BraveRewardsServiceImpl::SaveLedgerState(const std::string& ledger_state,
 void BraveRewardsServiceImpl::OnLedgerStateSaved(
     ledger::LedgerCallbackHandler* handler,
     bool success) {
-  handler->OnLedgerStateSaved(success ? ledger::Result::OK
-                                      : ledger::Result::ERROR);
+  handler->OnLedgerStateSaved(success ? ledger::Result::LEDGER_OK
+                                      : ledger::Result::LEDGER_ERROR);
 }
 
 void BraveRewardsServiceImpl::SavePublisherState(const std::string& publisher_state,
@@ -671,8 +671,8 @@ void BraveRewardsServiceImpl::SavePublisherState(const std::string& publisher_st
 void BraveRewardsServiceImpl::OnPublisherStateSaved(
     ledger::LedgerCallbackHandler* handler,
     bool success) {
-  handler->OnPublisherStateSaved(success ? ledger::Result::OK
-                                         : ledger::Result::ERROR);
+  handler->OnPublisherStateSaved(success ? ledger::Result::LEDGER_OK
+                                         : ledger::Result::LEDGER_ERROR);
 }
 
 
@@ -693,7 +693,7 @@ void BraveRewardsServiceImpl::OnPublisherInfoSaved(
     bool success) {
 
   //make a copy of PublisherInfo and attach it to unique_ptr
-  callback(success ? ledger::Result::OK : ledger::Result::ERROR, std::make_unique <ledger::PublisherInfo>(*info));
+  callback(success ? ledger::Result::LEDGER_OK : ledger::Result::LEDGER_ERROR, std::make_unique <ledger::PublisherInfo>(*info));
   TriggerOnContentSiteUpdated();
 }
 
@@ -734,7 +734,7 @@ void BraveRewardsServiceImpl::OnPublisherInfoLoaded(
     return;
   }
   else {
-    callback(ledger::Result::OK,
+    callback(ledger::Result::LEDGER_OK,
       std::make_unique<ledger::PublisherInfo>(list[0]));
   }
 }
@@ -1046,8 +1046,8 @@ void BraveRewardsServiceImpl::SavePublishersList(const std::string& publishers_l
 void BraveRewardsServiceImpl::OnPublishersListSaved(
     ledger::LedgerCallbackHandler* handler,
     bool success) {
-  handler->OnPublishersListSaved(success ? ledger::Result::OK
-                                         : ledger::Result::ERROR);
+  handler->OnPublishersListSaved(success ? ledger::Result::LEDGER_OK
+                                         : ledger::Result::LEDGER_ERROR);
 }
 
 
@@ -1073,7 +1073,7 @@ void BraveRewardsServiceImpl::OnPublisherListLoaded(
     const std::string& data) {
   handler->OnPublisherListLoaded(
       data.empty() ? ledger::Result::NO_PUBLISHER_LIST
-                   : ledger::Result::OK,
+                   : ledger::Result::LEDGER_OK,
       data);
 }
 
