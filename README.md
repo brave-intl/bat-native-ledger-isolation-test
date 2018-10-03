@@ -12,8 +12,8 @@ Some of the dependencies have pre-generated configuration files and minor patche
 All libraries,including bat-native-ledger are moving forward and their interfaces are changing. The solution is bound to a particular branch/commit of each component.
 Switching to a newer commit is possible but will require some work to put it together.
 
-* **bat-native-anonize**:  win-port-1/fc5d0a1dca2c3e351425e37b4727f2f0af2d620a
-* **bat-native-ledger**: master/5e1b68385ded70f255211d3c422889137988c090
+* **bat-native-anonize**:  master/e9f5bca3ed69e3db7223be4eac2d59145a7a83a2
+* **bat-native-ledger**: master/ca5d4b6d1a39c7e8e2fb149bbd62f9e71631eba6
 * **bat-native-rapidjson**: master/86aafe2ef89835ae71c9ed7c2527e3bb3000930e
 * **bat-native-tweetnacl**: master/1b4362968c8f22720bfb75af6f506d4ecc0f3116
 * **bip39wally-core-native**: master/e5aba371a56d3e41f7e80e868312446ce7bd434c 
@@ -29,7 +29,9 @@ Switching to a new commit will also require updating this **README.md**.
 ## Prerequisites:
 
 * The **leveldb** for windows depends on [Boost C++ library](https://www.boost.org/). The easiest way is to install pre-built Windows binaries and source files from [Boost download page](https://www.boost.org/users/download).
-Configurations for **x86** or **x86_64** will require the matching set of libraries. The location of Boost include directory and libs can be configured in projects properties files **globals.props**, **x86.props** and **x86_64.props** (in 'msvcpp' directory) in variables **$(Boost)** and **$(BoostLib)**.
+Configurations for **x86** or **x86_64** will require the matching set of libraries. Tested with [boost_1_67_0-msvc-14.1-32](https://sourceforge.net/projects/boost/files/boost-binaries/1.67.0/boost_1_67_0-msvc-14.1-32.exe/download) and
+[boost_1_67_0-msvc-14.1-64](https://sourceforge.net/projects/boost/files/boost-binaries/1.67.0/boost_1_67_0-msvc-14.1-64.exe/download). 
+The location of Boost include directory and libs can be configured in projects properties files **globals.props**, **x86.props** and **x86_64.props** (in 'msvcpp' directory) in variables **$(Boost)** and **$(BoostLib)**.
 
 ## Initial setup:
 
