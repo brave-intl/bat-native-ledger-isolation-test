@@ -28,8 +28,8 @@ class BraveRewardsServiceObserver {
     ledger::Grant properties) {
   };
   virtual void OnGrantCaptcha(BraveRewardsService* rewards_service,
-    std::string image) {
-  };
+                              std::string image,
+                              std::string hint) {};
   virtual void OnRecoverWallet(BraveRewardsService* rewards_service,
     unsigned int result,
     double balance,
@@ -40,6 +40,7 @@ class BraveRewardsServiceObserver {
     ledger::Grant grant) {
   };
   virtual void OnContentSiteUpdated(BraveRewardsService* rewards_service) {};
+  virtual void OnExcludedSitesChanged(BraveRewardsService* rewards_service) {};
 };
 
 }  // namespace brave_rewards

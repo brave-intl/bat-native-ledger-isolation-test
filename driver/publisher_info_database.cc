@@ -521,6 +521,74 @@ bool PublisherInfoDatabase::Find(int start,
   return succeded;
 }
 
+int PublisherInfoDatabase::Count(const ledger::PublisherInfoFilter& filter) {
+  //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+  bool initialized = Init();
+  assert(initialized);
+
+  if (!initialized)
+    return false;
+
+  std::string query = "SELECT COUNT(ai.publisher_id) "
+      "FROM activity_info AS ai "
+      "INNER JOIN publisher_info AS pi ON ai.publisher_id = pi.publisher_id "
+      "WHERE 1 = 1";
+
+  query+= BuildFilterClauses(0, 0, filter);
+
+  auto publisher_count = *db_ << query; //prapared statement
+
+  uint64_t count = 0;
+  publisher_count >> [&](uint64_t _count) {
+    count = _count;
+  };
+
+  publisher_count++;
+  publisher_count.used(true);
+
+  return count;
+}
+
+std::string PublisherInfoDatabase::BuildFilterClauses(int start,
+                                                int limit,
+                                                const ledger::PublisherInfoFilter& filter) {
+  std::ostringstream clauses;
+
+  if (!filter.id.empty())
+    clauses << " AND ai.publisher_id = " << filter.id;
+
+  if (filter.category != ledger::PUBLISHER_CATEGORY::ALL_CATEGORIES)
+    clauses << " AND ai.category = " << filter.category;
+
+  if (filter.month != ledger::PUBLISHER_MONTH::ANY)
+    clauses << " AND ai.month = " << filter.month;
+
+  if (filter.year > 0)
+    clauses << " AND ai.year = " << filter.year;
+
+  if (filter.min_duration > 0)
+    clauses << " AND ai.duration >= " << filter.min_duration;
+
+  if (filter.excluded != ledger::PUBLISHER_EXCLUDE::ALL)
+    clauses << " AND pi.excluded = " << filter.excluded;
+
+  for (const auto& it : filter.order_by) {
+    clauses << " ORDER BY " + it.first;
+    clauses << (it.second ? " ASC" : " DESC");
+  }
+
+  if (limit > 0) {
+    clauses << " LIMIT " + std::to_string(limit);
+
+    if (start > 1) {
+      clauses << " OFFSET " + std::to_string(start);
+    }
+  }
+
+  return clauses.str();
+}
+
 // static
 int PublisherInfoDatabase::GetCurrentVersion() {
   return kCurrentVersionNumber;

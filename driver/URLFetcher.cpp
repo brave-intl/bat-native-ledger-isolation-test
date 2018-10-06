@@ -90,4 +90,8 @@ namespace bat_ledger_urlfetcher
     url = url_;
   }
 
+  void URLFetcher::GetResponseHeaders(std::map<std::string, std::string> & headers) const {
+
+  }
+
 };

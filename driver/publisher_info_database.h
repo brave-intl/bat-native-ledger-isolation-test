@@ -38,6 +38,8 @@ class PublisherInfoDatabase {
             int limit,
             const ledger::PublisherInfoFilter& filter,
             ledger::PublisherInfoList* list);
+  int Count(const ledger::PublisherInfoFilter& filter);
+
   std::unique_ptr<ledger::PublisherInfo> GetMediaPublisherInfo(
       const std::string& media_key);
 
@@ -50,10 +52,15 @@ class PublisherInfoDatabase {
 
   bool CreateContributionInfoTable();
   bool CreatePublisherInfoTable();
-  bool CreateContributionInfoIndex();
-  bool CreateActivityInfoTable();
-  bool CreateActivityInfoIndex();
   bool CreateMediaPublisherInfoTable();
+  bool CreateActivityInfoTable();
+  bool CreateContributionInfoIndex();
+
+  bool CreateActivityInfoIndex();
+
+  std::string BuildFilterClauses(int start,
+                           int limit,
+                           const ledger::PublisherInfoFilter& filter);
 
   bool EnsureCurrentVersion();
 

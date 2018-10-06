@@ -9,6 +9,7 @@
 #include <memory>
 #include <cassert>
 #include <sstream>
+#include <map>
 
 #include <curl/curl.h>
 
@@ -46,6 +47,7 @@ namespace bat_ledger_urlfetcher
     void GetResponseAsString(std::string * response) const;
     bool GetStatus() const;
     void GetUrl(std::string & url) const;
+    void GetResponseHeaders(std::map<std::string, std::string> & headers) const;
 
     static std::unique_ptr <URLFetcher> Create(const std::string & url, ledger::URL_METHOD metod, URLFetcherDelegate * url_delegate);
   private:
