@@ -31,7 +31,7 @@ Switching to a new commit will also require updating this **README.md**.
 * The **leveldb** for windows depends on [Boost C++ library](https://www.boost.org/). The easiest way is to install pre-built Windows binaries and source files from [Boost download page](https://www.boost.org/users/download).
 Configurations for **x86** or **x86_64** will require the matching set of libraries. Tested with [boost_1_67_0-msvc-14.1-32](https://sourceforge.net/projects/boost/files/boost-binaries/1.67.0/boost_1_67_0-msvc-14.1-32.exe/download) and
 [boost_1_67_0-msvc-14.1-64](https://sourceforge.net/projects/boost/files/boost-binaries/1.67.0/boost_1_67_0-msvc-14.1-64.exe/download). 
-The location of Boost include directory and libs can be configured in projects properties files **globals.props**, **x86.props** and **x86_64.props** (in 'msvcpp' directory) in variables **$(Boost)** and **$(BoostLib)**.
+The location of Boost include directory and libs can be configured in projects properties files **globals.props**, **x86.props** and **x86_64.props** (in 'msvcpp' directory) in variables **$(Boost)** and **$(BoostLib)** (set to **'C:\lib\boost_1_67_0\'** by default).
 
 ## Initial setup:
 
@@ -43,8 +43,8 @@ To bring all the dependencies, to switch to the right commit and to apply patche
 Use **BraveRewardsService::TestingJoinAllRunningTasks()** call after each test to wait for all spawned tasks/callbacks.
 
 * **LedgerImpl::RefreshPublishersList** is using recursive timer to download a fresh verified publishers list. In this case there will always be a timer waiting task running in background 
-and **BraveRewardsService::TestingJoinAllRunningTasks()** will wait forever. Call **BraveRewardsService::AllowTimersRun(number_of_timers)** before **BraveRewardsService::Init()**
+and **BraveRewardsService::TestingJoinAllRunningTasks()** will wait forever. Call **BraveRewardsService::AllowTimersRun(number_of_timers)** (set to **1** by default) before **BraveRewardsService::Init()**
 to allow a maximum number of timers iterations to run. 
 
-
+* If you have to run your testing again and again, then don't forget to delete files **publisher_state**, **publishers_list**, **ledger_state** from your home directory.
 
