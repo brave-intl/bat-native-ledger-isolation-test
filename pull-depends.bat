@@ -4,8 +4,12 @@
 :: ##########################################################################################
 
 set "ROOT=%cd%"
-set PATCHES=%ROOT%\patches
+set PATCHES="%ROOT%\patches"
 set PULLLOCKFILE=.pulllock
+
+echo %ROOT%
+
+exit /b 0
 
 if exist %PULLLOCKFILE% (
   echo You have pulled dependencies already. To force it: remove .pulllock file and re-run.
