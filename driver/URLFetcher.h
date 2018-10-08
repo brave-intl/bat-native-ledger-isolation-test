@@ -59,6 +59,7 @@ namespace bat_ledger_urlfetcher
     CURL *curl_;
     long response_code_;
     std::ostringstream response_data_;
+    std::ostringstream response_header_data_;
   };
 
 };  //namespace  bat_ledger_urlfetcher

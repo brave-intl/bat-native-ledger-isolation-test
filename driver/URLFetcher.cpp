@@ -1,8 +1,15 @@
 #include "stdafx.h"
 #include <sstream>
+#include <vector>
+#include <string>
 #include <thread>
 #include <iostream>
 #include "URLFetcher.h"
+
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/regex.hpp>
 
 namespace bat_ledger_urlfetcher
 {
@@ -46,6 +53,19 @@ namespace bat_ledger_urlfetcher
 
     //convert to __cdecl
     curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, static_cast<CurlWriteDataCallbackSignature> (writecallback));
+
+
+    //define responseHeadercallback
+    auto responseHeadercallback = [](char* ptr, size_t size, size_t nmemb, void* resultBody) {
+      std::ostringstream & os = *(static_cast<std::ostringstream*>(resultBody));
+      os << std::string(ptr, size * nmemb);
+      return size * nmemb;
+    };
+    curl_easy_setopt(curl_, CURLOPT_HEADERDATA, &response_header_data_);
+
+    //convert to __cdecl
+    curl_easy_setopt(curl_, CURLOPT_HEADERFUNCTION, static_cast<CurlWriteDataCallbackSignature> (responseHeadercallback));
+
 
     CURLcode res = curl_easy_perform(curl_);
     if (res != CURLE_OK) {
@@ -91,7 +111,26 @@ namespace bat_ledger_urlfetcher
   }
 
   void URLFetcher::GetResponseHeaders(std::map<std::string, std::string> & headers) const {
+    std::vector< std::string > v;
+    std::string s = response_header_data_.str();
+    boost::algorithm::split_regex(v, s, boost::regex("\r\n"));
+    for (auto & i : v) {
+      std::vector< std::string > header_value;
+      boost::algorithm::split(header_value, i, boost::is_any_of(":"), boost::token_compress_on);
+      if (header_value.size() < 2) {
+        continue;
+      }
 
+      auto it_header = headers.find(header_value[0]);
+      if (it_header == headers.end()) {
+        headers[header_value[0]] = header_value[1];
+      }
+      else {
+        //add repeating header
+        it_header->second += ", ";
+        it_header->second += header_value[1];
+      }
+    }
   }
 
 };
