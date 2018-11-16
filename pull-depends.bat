@@ -7,9 +7,6 @@ set "ROOT=%cd%"
 set PATCHES="%ROOT%\patches"
 set PULLLOCKFILE=.pulllock
 
-echo %ROOT%
-
-exit /b 0
 
 if exist %PULLLOCKFILE% (
   echo You have pulled dependencies already. To force it: remove .pulllock file and re-run.
@@ -19,7 +16,6 @@ if exist %PULLLOCKFILE% (
 type nul > %PULLLOCKFILE%
 
 git submodule update --init --recursive
-
 
 cd %ROOT%\bat-native-ledger
 git apply %PATCHES%\bat-native-ledger\bat-native-ledger.patch

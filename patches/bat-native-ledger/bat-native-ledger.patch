@@ -1,18 +1,3 @@
-diff --git a/src/bat/ledger/ledger.cc b/src/bat/ledger/ledger.cc
-index ad16c05..9dc14e7 100644
---- a/src/bat/ledger/ledger.cc
-+++ b/src/bat/ledger/ledger.cc
-@@ -12,8 +12,8 @@
- 
- namespace ledger {
- 
--bool is_production = true;
--bool is_verbose = true;
-+bool is_production = false;
-+bool is_verbose = false;
- 
- VisitData::VisitData():
-     tab_id(-1) {}
 diff --git a/src/bat_helper_platform.cc b/src/bat_helper_platform.cc
 index d963a70..e01ffb9 100644
 --- a/src/bat_helper_platform.cc

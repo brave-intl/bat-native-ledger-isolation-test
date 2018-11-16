@@ -13,7 +13,7 @@ All libraries,including bat-native-ledger are moving forward and their interface
 Switching to a newer commit is possible but will require some work to put it together.
 
 * **bat-native-anonize**:  master/e9f5bca3ed69e3db7223be4eac2d59145a7a83a2
-* **bat-native-ledger**: master/ca5d4b6d1a39c7e8e2fb149bbd62f9e71631eba6
+* **bat-native-ledger**: master/693c6d49a58caf36de77a60aee7bf23fe51162a0
 * **bat-native-rapidjson**: master/86aafe2ef89835ae71c9ed7c2527e3bb3000930e
 * **bat-native-tweetnacl**: master/1b4362968c8f22720bfb75af6f506d4ecc0f3116
 * **bip39wally-core-native**: master/e5aba371a56d3e41f7e80e868312446ce7bd434c 

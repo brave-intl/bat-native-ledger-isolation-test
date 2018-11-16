@@ -146,7 +146,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;CURL_STATICLIB;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;$(Relic)include;$(Anonize2)win_x86_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -161,7 +161,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;CURL_STATICLIB;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;$(Relic)include;$(Anonize2)win_x64_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -178,7 +178,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;CURL_STATICLIB;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;$(Relic)include;$(Anonize2)win_x86_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -197,7 +197,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;CURL_STATICLIB;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Ledger)\src;$(Ledger)include;$(Anonize2Root);$(WallyRoot)include;$(RapidJsonRoot)include;$(BoringsslRoot)include;$(Tweetnacl);$(LeveldbRoot)include;$(Libcurl)include;$(Relic)include;$(Anonize2)win_x64_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
