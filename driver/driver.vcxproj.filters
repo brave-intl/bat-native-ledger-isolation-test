@@ -48,6 +48,15 @@
     <ClInclude Include="wallet_properties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="contribution_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="publisher_banner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="recurring_donation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -78,6 +87,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="wallet_properties.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="contribution_info.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="publisher_banner.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="recurring_donation.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

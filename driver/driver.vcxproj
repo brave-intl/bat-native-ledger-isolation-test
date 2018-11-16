@@ -178,8 +178,11 @@
     <ClInclude Include="brave_rewards_service_impl.h" />
     <ClInclude Include="brave_rewards_service_observer.h" />
     <ClInclude Include="content_site.h" />
+    <ClInclude Include="contribution_info.h" />
+    <ClInclude Include="publisher_banner.h" />
     <ClInclude Include="publisher_info_backend.h" />
     <ClInclude Include="publisher_info_database.h" />
+    <ClInclude Include="recurring_donation.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="URLFetcher.h" />
@@ -190,9 +193,12 @@
     <ClCompile Include="brave_rewards_service.cc" />
     <ClCompile Include="brave_rewards_service_impl.cc" />
     <ClCompile Include="content_site.cc" />
+    <ClCompile Include="contribution_info.cc" />
     <ClCompile Include="driver.cpp" />
+    <ClCompile Include="publisher_banner.cc" />
     <ClCompile Include="publisher_info_backend.cc" />
     <ClCompile Include="publisher_info_database.cc" />
+    <ClCompile Include="recurring_donation.cc" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
