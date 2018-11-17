@@ -1,3 +1,28 @@
+diff --git a/src/bat/ledger/ledger.cc b/src/bat/ledger/ledger.cc
+index 2a857ac..bc637a4 100644
+--- a/src/bat/ledger/ledger.cc
++++ b/src/bat/ledger/ledger.cc
+@@ -12,7 +12,7 @@
+ 
+ namespace ledger {
+ 
+-bool is_production = true;
++bool is_production = false;
+ int reconcile_time = 0; // minutes
+ bool short_retries = false;
+ 
+diff --git a/src/bat_contribution.cc b/src/bat_contribution.cc
+index 6170e87..97766ba 100644
+--- a/src/bat_contribution.cc
++++ b/src/bat_contribution.cc
+@@ -7,6 +7,7 @@
+ #include <ctime>
+ #include <map>
+ #include <vector>
++#include <sstream>
+ 
+ #include "anon/anon.h"
+ #include "bat_contribution.h"
 diff --git a/src/bat_helper_platform.cc b/src/bat_helper_platform.cc
 index d963a70..e01ffb9 100644
 --- a/src/bat_helper_platform.cc
