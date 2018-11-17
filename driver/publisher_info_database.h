@@ -20,6 +20,8 @@
 
 #include "bat/ledger/publisher_info.h"
 #include "sqlite_modern_cpp.h"
+#include "contribution_info.h"
+#include "recurring_donation.h"
 
 namespace brave_rewards {
 
@@ -33,6 +35,8 @@ class PublisherInfoDatabase {
 
   bool InsertOrUpdatePublisherInfo(const ledger::PublisherInfo& info);
   bool InsertOrUpdateMediaPublisherInfo(const std::string& media_key, const std::string& publisher_id);
+  bool InsertContributionInfo(const brave_rewards::ContributionInfo& info);
+  bool InsertOrUpdateRecurringDonation(const brave_rewards::RecurringDonation& info);
 
   bool Find(int start,
             int limit,
@@ -42,6 +46,9 @@ class PublisherInfoDatabase {
 
   std::unique_ptr<ledger::PublisherInfo> GetMediaPublisherInfo(
       const std::string& media_key);
+  void GetRecurringDonations(ledger::PublisherInfoList* list);
+  void GetTips(ledger::PublisherInfoList* list, ledger::PUBLISHER_MONTH month, int year);
+  bool RemoveRecurring(const std::string& publisher_key);
 
   // Returns the current version of the publisher info database
   static int GetCurrentVersion();
@@ -57,6 +64,8 @@ class PublisherInfoDatabase {
   bool CreateContributionInfoIndex();
 
   bool CreateActivityInfoIndex();
+  bool CreateRecurringDonationTable();
+  bool CreateRecurringDonationIndex();
 
   std::string BuildFilterClauses(int start,
                            int limit,

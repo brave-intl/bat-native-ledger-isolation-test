@@ -16,4 +16,5 @@ BraveRewardsService::~BraveRewardsService() {
 void BraveRewardsService::Shutdown() {
 }
 
+
 }  // namespace brave_rewards

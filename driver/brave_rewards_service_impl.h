@@ -71,8 +71,8 @@ public:
   void Init();
   //Ledger interface///////////////////////////////////////////////////////////////////////
   void CreateWallet() override;
-  void GetWalletProperties() override;
-  void GetGrant(const std::string& lang, const std::string& paymentId) override;
+  void FetchWalletProperties() override;
+  void FetchGrant(const std::string& lang, const std::string& paymentId) override;
   void GetGrantCaptcha() override;
   void SolveGrantCaptcha(const std::string& solution) const override;
   std::string GetWalletPassphrase() const override;
@@ -111,20 +111,36 @@ public:
   void GetCurrentBalanceReport() override;
 
   bool IsWalletCreated() override;
-  void GetPublisherActivityFromUrl(uint64_t windowId, const std::string& url) override;
+  void GetPublisherActivityFromUrl(uint64_t windowId, const std::string& url, const std::string& favicon_url) override;
+
+	double GetContributionAmount() override;
+  void GetPublisherBanner(const std::string& publisher_id) override;
+  void OnPublisherBanner(std::unique_ptr<ledger::PublisherBanner> banner);
+  void RemoveRecurring(const std::string& publisher_key) override;
+  void UpdateRecurringDonationsList() override;
+  void UpdateTipsList() override;
+
+  void SetContributionAutoInclude(
+    std::string publisher_key, bool excluded, uint64_t windowId) override;
+
+
   //testing
   void TestingJoinAllRunningTasks() override;
 
-  //timers: allow only a total number of timers to run
+  //timers: allow only a number of timers to run
+  //0 - unlimited
   void AllowTimersRun(uint32_t timers) override;
 
 private:
-  typedef std::function<void(const std::string&, int, const std::string&, const std::map<std::string,std::string> & headers )> FetchCallback;
+  friend void RunIOTaskCallback(BraveRewardsServiceImpl * service,std::function<void(void)>);
+
+  typedef std::function<void(int, const std::string&, const std::map<std::string,std::string> & headers )> FetchCallback;
 
   void OnLedgerStateSaved(ledger::LedgerCallbackHandler* handler,
                           bool success);
   void OnLedgerStateLoaded(ledger::LedgerCallbackHandler* handler,
                               const std::string& data);
+  void LoadNicewareList(ledger::GetNicewareListCallback callback) override;
   void OnPublisherStateSaved(ledger::LedgerCallbackHandler* handler,
                              bool success);
   void OnPublisherStateLoaded(ledger::LedgerCallbackHandler* handler,
@@ -151,7 +167,7 @@ private:
                              std::shared_ptr<ledger::PublisherInfo> info);
   void OnPublisherInfoListLoaded(uint32_t start,
                                  uint32_t limit,
-                                 ledger::GetPublisherInfoListCallback callback,
+                                 ledger::PublisherInfoListCallback callback,
                                  const ledger::PublisherInfoList& list);
   void OnPublishersListSaved(ledger::LedgerCallbackHandler* handler,
                              bool success);
@@ -160,6 +176,22 @@ private:
   void OnPublisherListLoaded(ledger::LedgerCallbackHandler* handler,
                              const std::string& data);
 
+  void OnDonate(const std::string& publisher_key, int amount, bool recurring) override;
+  void OnContributionInfoSaved(const ledger::PUBLISHER_CATEGORY category, bool success);
+  void OnRecurringDonationSaved(bool success);
+  void SaveRecurringDonation(const std::string& publisher_key, const int amount);
+  void OnRecurringDonationsData(const ledger::PublisherInfoListCallback callback,
+                                const ledger::PublisherInfoList list);
+  void OnRecurringDonationUpdated(const ledger::PublisherInfoList& list);
+  void OnTipsUpdatedData(const ledger::PublisherInfoList list);
+  void TipsUpdated();
+  void OnRemovedRecurring(ledger::RecurringRemoveCallback callback, bool success);
+  void OnRemoveRecurring(const std::string& publisher_key, ledger::RecurringRemoveCallback callback) override;
+  void TriggerOnGetCurrentBalanceReport(const ledger::BalanceReportInfo& report);
+  void TriggerOnGetPublisherActivityFromUrl(
+      ledger::Result result,
+      std::unique_ptr<ledger::PublisherInfo> info,
+      uint64_t windowId);
   void PostWriteCallback(std::function < void(bool success)> & callback, bool write_success);
   // ledger::LedgerClient/////////////////////////////////////////////////////////////////////////
   std::string GenerateGUID() const override;
@@ -172,7 +204,9 @@ private:
                       double balance,
                       const std::vector<ledger::Grant>& grants) override;
   void OnReconcileComplete(ledger::Result result,
-                           const std::string& viewing_id) override;
+                           const std::string& viewing_id,
+                           ledger::PUBLISHER_CATEGORY category,
+                           const std::string& probi) override;
   void OnGrantFinish(ledger::Result result,
                      const ledger::Grant& grant) override;
   void LoadLedgerState(ledger::LedgerCallbackHandler* handler) override;
@@ -190,7 +224,12 @@ private:
       uint32_t start,
       uint32_t limit,
       ledger::PublisherInfoFilter filter,
-      ledger::GetPublisherInfoListCallback callback) override;
+      ledger::PublisherInfoListCallback callback) override;
+  void LoadCurrentPublisherInfoList(
+      uint32_t start,
+      uint32_t limit,
+      ledger::PublisherInfoFilter filter,
+      ledger::PublisherInfoListCallback callback) override;
   void SavePublishersList(const std::string& publishers_list,
                           ledger::LedgerCallbackHandler* handler) override;
   void SetTimer(uint64_t time_offset, uint32_t& timer_id) override;
@@ -204,7 +243,7 @@ private:
                    ledger::LedgerCallbackHandler* handler) override;
 
   void RunIOTask(std::unique_ptr<ledger::LedgerTaskRunner> task) override;
-  void RunTask(std::unique_ptr<ledger::LedgerTaskRunner> task) override;
+  void RunTask(std::unique_ptr<ledger::LedgerTaskRunner> task);
   void SetRewardsMainEnabled(bool enabled) const override;
   void SetPublisherMinVisitTime(uint64_t duration_in_seconds) const override;
   void SetPublisherMinVisits(unsigned int visits) const override;
@@ -213,10 +252,27 @@ private:
   void SetContributionAmount(double amount) const override;
   void SetUserChangedContribution() const override;
   void SetAutoContribute(bool enabled) const override;
+  void OnExcludedSitesChanged() override;
   void OnPublisherActivity(ledger::Result result,
                           std::unique_ptr<ledger::PublisherInfo> info,
                           uint64_t windowId) override;
-  void OnExcludedSitesChanged() override;
+  void FetchFavIcon(const std::string& url,
+                    const std::string& favicon_key,
+                    ledger::FetchIconCallback callback) override;
+
+  void OnSetOnDemandFaviconComplete(const std::string& favicon_url,
+                                    ledger::FetchIconCallback callback,
+                                    bool success);
+  void SaveContributionInfo(const std::string& probi,
+                            const int month,
+                            const int year,
+                            const uint32_t date,
+                            const std::string& publisher_key,
+                            const ledger::PUBLISHER_CATEGORY category) override;
+  void GetRecurringDonations(ledger::PublisherInfoListCallback callback) override;
+  void Log(ledger::LogLevel level, const std::string& text) override;
+
+  void OnIOTaskComplete(std::function<void(void)> callback);
 
   // URLFetcherDelegate impl
   void OnURLFetchComplete(const bat_ledger_urlfetcher::URLFetcher* source) /*override*/;
@@ -245,7 +301,7 @@ private:
   boost::asio::io_service io_;
   std::atomic<uint32_t> timer_id_ = 0u;
   std::mutex timer_mx_;
-  uint32_t max_number_timers_ = 2u;
+  std::atomic <uint32_t> max_number_timers_ = 0u;
 };
 
 }  // namespace brave_rewards

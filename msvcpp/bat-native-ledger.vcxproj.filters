@@ -42,6 +42,15 @@
     <ClCompile Include="..\bat-native-ledger\src\bat_helper_platform.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\bat-native-ledger\src\bat_state.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\bat-native-ledger\src\bat_contribution.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\bat-native-ledger\src\bignum.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(Ledger)include\bat\ledger\export.h">
@@ -105,6 +114,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\bat-native-ledger\include\bat\ledger\media_publisher_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bat-native-ledger\src\bat_state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bat-native-ledger\src\bat_contribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bat-native-ledger\src\bignum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

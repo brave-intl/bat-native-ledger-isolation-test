@@ -15,7 +15,8 @@ namespace brave_rewards {
       id(site_id),
       percentage(0),
       verified(false),
-      excluded(0) {
+      excluded(0),
+      reconcile_stamp(0) {
   }
 
   ContentSite::~ContentSite() {}
@@ -29,6 +30,7 @@ namespace brave_rewards {
     url = properties.url;
     provider = properties.provider;
     id = properties.id;
+    reconcile_stamp = properties.reconcile_stamp;
   }
 
 }  // namespace brave_rewards

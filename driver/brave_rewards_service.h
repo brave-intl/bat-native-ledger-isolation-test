@@ -16,7 +16,9 @@
 #include <functional>
 #include "brave_rewards_service_observer.h"
 #include "bat/ledger/ledger.h"
+#include "content_site.h"
 #include "balance_report.h"
+#include "publisher_banner.h"
 
 namespace brave_rewards {
 
@@ -51,17 +53,17 @@ public:
 
   // Ledger interface:///////////////////////////////////////////////////////////////
   virtual void CreateWallet() = 0;
-  virtual void GetWalletProperties() = 0;
+  virtual void FetchWalletProperties() = 0;
   virtual void GetContentSiteList(uint32_t start,
                                   uint32_t limit,
                                 const GetContentSiteListCallback& callback) = 0;
-  virtual void GetGrant(const std::string& lang, const std::string& paymentId) = 0;
+  virtual void FetchGrant(const std::string& lang, const std::string& paymentId) = 0;
   virtual void GetGrantCaptcha() = 0;
   virtual void SolveGrantCaptcha(const std::string& solution) const = 0;
   virtual std::string GetWalletPassphrase() const = 0;
   virtual unsigned int GetNumExcludedSites() const = 0;
-  virtual void RecoverWallet(std::string passPhrase) const = 0;
-  virtual void ExcludePublisher(std::string publisherKey) const = 0;
+  virtual void RecoverWallet(const std::string passPhrase) const = 0;
+  virtual void ExcludePublisher(const std::string publisherKey) const = 0;
   virtual void RestorePublishers() = 0;
   virtual void OnLoad(uint32_t tab_id, const std::string & gurl) = 0;
 
@@ -99,7 +101,16 @@ public:
 
 	virtual void GetCurrentBalanceReport() = 0;
   virtual bool IsWalletCreated() = 0;
-  virtual void GetPublisherActivityFromUrl(uint64_t windowId, const std::string& url) = 0;
+  virtual void GetPublisherActivityFromUrl(uint64_t windowId, const std::string& url, const std::string& favicon_url) = 0;
+  virtual double GetContributionAmount() = 0;
+  virtual void GetPublisherBanner(const std::string& publisher_id) = 0;
+  virtual void OnDonate(const std::string& publisher_key, int amount, bool recurring) = 0;
+  virtual void RemoveRecurring(const std::string& publisher_key) = 0;
+  virtual void UpdateRecurringDonationsList() = 0;
+  virtual void UpdateTipsList() = 0;
+  virtual void SetContributionAutoInclude(
+    std::string publisher_key, bool excluded, uint64_t windowId) = 0;
+
 
   //Testing
   virtual void TestingJoinAllRunningTasks() = 0;

@@ -6,6 +6,9 @@
 #define BRAVE_REWARDS_SERVICE_OBSERVER_H_
 
 #include "bat/ledger/grant.h"
+#include "bat/ledger/publisher_info.h"
+#include "content_site.h"
+#include "publisher_banner.h"
 #include "wallet_properties.h"
 
 namespace brave_rewards {
@@ -41,6 +44,21 @@ class BraveRewardsServiceObserver {
   };
   virtual void OnContentSiteUpdated(BraveRewardsService* rewards_service) {};
   virtual void OnExcludedSitesChanged(BraveRewardsService* rewards_service) {};
+  virtual void OnReconcileComplete(BraveRewardsService* rewards_service,
+                                   unsigned int result,
+                                   const std::string& viewing_id,
+                                   const std::string& probi) {};
+  virtual void OnRecurringDonationUpdated(BraveRewardsService* rewards_service,
+                                          brave_rewards::ContentSiteList) {};
+  virtual void OnCurrentTips(BraveRewardsService* rewards_service,
+                             brave_rewards::ContentSiteList) {};
+  virtual void OnPublisherBanner(BraveRewardsService* rewards_service,
+                                 const brave_rewards::PublisherBanner banner) {};
+  virtual void OnGetPublisherActivityFromUrl(
+      BraveRewardsService* rewards_service,
+      int error_code,
+      ledger::PublisherInfo* info,
+      uint64_t windowId) {};
 };
 
 }  // namespace brave_rewards
