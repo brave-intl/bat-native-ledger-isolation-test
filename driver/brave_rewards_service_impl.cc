@@ -196,7 +196,7 @@ ledger::PublisherInfoList LoadPublisherInfoListOnFileTaskRunner(
   if (!backend)
     return list;
 
-  //ignore_result(backend->Find(start, limit, filter, &list));
+  backend->Find(start, limit, filter, &list);
 
   return list;
 }
@@ -258,11 +258,11 @@ BraveRewardsServiceImpl::BraveRewardsServiceImpl(Profile* profile) :
 
     ledger_state_path_(profile_->GetPath().append("\\ledger_state")),
     publisher_state_path_(profile_->GetPath().append("\\publisher_state")),
-    publisher_info_db_path_(profile->GetPath().append("\\publisher_info")),
+    publisher_info_db_path_(profile->GetPath().append("\\publisher_info_db")),
     publisher_list_path_(profile->GetPath().append("\\publishers_list")),
     publisher_info_backend_(new PublisherInfoDatabase(publisher_info_db_path_)),
     timer_id_ (0u),
-    max_number_timers_ (2u)
+    max_number_timers_ (0u)
 {
 }
 
@@ -1591,7 +1591,14 @@ void BraveRewardsServiceImpl::SetTimer(uint64_t time_offset, uint32_t & timer_id
   t.async_wait([timer_id, this](const boost::system::error_code& e) {
     if (!e) {
       std::cout << std::endl << "timer expired: " << timer_id << std::endl;
-      ledger_->OnTimer(timer_id);
+
+
+      bat_ledger::LedgerTaskRunnerImpl::Task ontimer_task = [this, timer_id](auto callback) {
+        ledger_->OnTimer(timer_id);
+      };
+      std::unique_ptr<ledger::LedgerTaskRunner> task(new bat_ledger::LedgerTaskRunnerImpl(ontimer_task));
+      RunTask(std::move(task));
+
     }
     else if (e == boost::asio::error::operation_aborted) {
       std::cout << std::endl << "timer has been cancelled: " << timer_id << std::endl;

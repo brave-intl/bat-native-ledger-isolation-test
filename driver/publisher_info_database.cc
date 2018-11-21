@@ -44,14 +44,12 @@ PublisherInfoDatabase::~PublisherInfoDatabase() {
 bool PublisherInfoDatabase::MetaTableInit() {
   bool succeded = false;
 
-  if (!initialized_)
-    return false;
-
   try {
     //create meta table
     *db_ << "create table if not exists meta (key longvarchar not null unique primary key, value longvarchar);";
     *db_ << "insert or replace into meta (key,value) values (?,?)" << "version" << GetCurrentVersion();
     *db_ << "insert or replace into meta (key,value) values (?,?)" << "last_compatible_version" << kCompatibleVersionNumber;
+    succeded = true;
   }
   catch (sqlite::sqlite_exception e)
   {
@@ -77,7 +75,8 @@ bool PublisherInfoDatabase::Init() {
     *db_ << "begin;"; // begin a transaction ...
     transactionStarted = true;
 
-    if (!CreatePublisherInfoTable() ||
+    if ( !MetaTableInit() ||
+      !CreatePublisherInfoTable() ||
       !CreateContributionInfoTable() ||
       !CreateActivityInfoTable() ||
       !CreateMediaPublisherInfoTable() ||
@@ -236,7 +235,7 @@ bool PublisherInfoDatabase::CreateActivityInfoIndex() {
   //DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   bool succeded = false;
   try {
-    *db_ << "CREATE INDEX IF NOT EXISTS activity_info_publisher_id_index "  <<    "ON activity_info (publisher_id)";
+    *db_ << "CREATE INDEX IF NOT EXISTS activity_info_publisher_id_index ON activity_info (publisher_id)";
     succeded = true;
   }
   catch (sqlite::sqlite_exception e)
@@ -307,8 +306,7 @@ bool PublisherInfoDatabase::CreateRecurringDonationTable() {
 bool PublisherInfoDatabase::CreateRecurringDonationIndex() {
   bool succeded = false;
   try {
-    *db_ << "CREATE INDEX IF NOT EXISTS recurring_donation_publisher_id_index " <<
-      "ON recurring_donation (publisher_id)";
+    *db_ << "CREATE INDEX IF NOT EXISTS recurring_donation_publisher_id_index ON recurring_donation (publisher_id)";
     succeded = true;
   }
   catch (sqlite::sqlite_exception e)
@@ -537,7 +535,7 @@ bool PublisherInfoDatabase::Find(int start,
   }
 
   if (filter.min_duration > 0) {
-    query << " AND ai.min_duration = ";
+    query << " AND ai.duration >= ";
     query << filter.min_duration;
   }
 
